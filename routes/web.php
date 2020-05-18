@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/artist/insert', "ArtistController@insertIndex");
+Route::post('/artist/insert', "ArtistController@insert");
+
+
