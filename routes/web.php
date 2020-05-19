@@ -15,7 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/artist', 'ArtistController@index')->name('pages.artist.index');
+
 Route::get('/artist/insert', "ArtistController@insertIndex");
 Route::post('/artist/insert', "ArtistController@insert");
+
+Route::get('/artist/update', "ArtistController@updateIndex");
+Route::post('/artist/update', "ArtistController@update");
+
 
 

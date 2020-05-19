@@ -3,7 +3,7 @@
         
     </head>
     <body>
-        <form action="/artist/insert" method="POST">
+        <form action="/artist/update" method="POST">
             @csrf
             <div class="form-group row">
                 <div class="form-group">

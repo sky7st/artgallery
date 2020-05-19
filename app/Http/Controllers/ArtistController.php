@@ -13,7 +13,7 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        
+        return view('pages.artist.index');
     }
 
     public function insert(Request $request){
@@ -27,26 +27,45 @@ class ArtistController extends Controller
         $sly = $request->input('sly'); 
         $sytd = $request->input('sytd'); 
 
-        //check code
-        
-        DB::table('artist')->insert([
-            [
-                'artist_ssn' => $ssn,
-                'name' => $name,
-                'address' => $add,
-                'phone' => $phone,
-                'usual_type' => $utype,
-                'usual_medium' => $umedium,
-                'usual_style' => $ustyle,
-                'sales_last_year' => $sly,
-                'sales_year_to_date' => $sytd
-            ]
-        ]);        
+        //check code todo
+
+        // DB::table('artist')->insert([
+        //     [
+        //         'artist_ssn' => $ssn,
+        //         'name' => $name,
+        //         'address' => $add,
+        //         'phone' => $phone,
+        //         'usual_type' => $utype,
+        //         'usual_medium' => $umedium,
+        //         'usual_style' => $ustyle,
+        //         'sales_last_year' => $sly,
+        //         'sales_year_to_date' => $sytd
+        //     ]
+        // ]);        
         return redirect('/');
     }
 
     public function insertIndex(){
-        return view('artist.insert');
+        return view('pages.artist.insert');
+    }
+
+    //todo
+    public function update(Request $request){
+        $ssn = $request->input('ssn'); 
+        $name = $request->input('name'); 
+        $phone = $request->input('phone'); 
+        $add = $request->input('add'); 
+        $umedium = $request->input('umedium'); 
+        $ustyle = $request->input('ustyle'); 
+        $utype = $request->input('utype'); 
+        $sly = $request->input('sly'); 
+        $sytd = $request->input('sytd'); 
+       
+        return redirect('/');
+    }
+
+    public function updateIndex(){
+        return view('pages.artist.insert');
     }
     /**
      * Show the form for creating a new resource.
@@ -87,18 +106,6 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
     {
         //
     }
