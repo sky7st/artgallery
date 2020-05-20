@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Artist;
 class ArtistController extends Controller
 {
     /**
@@ -13,7 +14,12 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return view('pages.artist.index');
+        // $results = DB::select('select * from artist', array(1));
+        // $results = DB::table('artist')->get();
+        $results = Artist::all();
+        return view('pages.artist.index', [
+            "artists" => $results
+        ]);
     }
 
     public function insert(Request $request){
@@ -96,7 +102,13 @@ class ArtistController extends Controller
      */
     public function show($id)
     {
-        //
+        $result = Artist::where('id', $id)->first();
+
+        //todo check
+
+        return view('pages.artist.show', [
+            "artist" => $result
+        ]);
     }
 
     /**
@@ -118,6 +130,33 @@ class ArtistController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!is_numeric($id))
+            return response()->json([
+                'message' => 'error',
+                'err' => "id is not numeric"
+            ]);
+        else{
+            $artist = Artist::where("id", $id)->first();
+            if(isset($artist))
+                
+                $artist->delete();
+            //     if(!$res)
+            //         return response()->json([
+            //             'message' => 'error',
+            //             'err' => "delete error"
+            //         ]); 
+            //     else
+            //         return response()->json([
+            //             'message' => 'true',
+            //             'err' => ""
+            //         ]);
+            // }
+            // return response()->json([
+            //     'message' => 'error',
+            //     'err' => "id does not exists"
+            // ]);
+                // return response()->json($artist->toJson());
+                return redirect('/artist');
+        }
     }
 }

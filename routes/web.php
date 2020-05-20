@@ -16,12 +16,17 @@ Route::get('/', function () {
 });
 
 Route::get('/artist', 'ArtistController@index')->name('pages.artist.index');
+Route::get('/artist/{id}', 'ArtistController@show')->name('pages.artist.show');
+Route::get('/artist/{id}/delete', 'ArtistController@destroy');
+
 
 Route::get('/artist/insert', "ArtistController@insertIndex");
 Route::post('/artist/insert', "ArtistController@insert");
 
 Route::get('/artist/update', "ArtistController@updateIndex");
-Route::post('/artist/update', "ArtistController@update");
+Route::post('/artist/{id}/update', "ArtistController@update");
+
+
 
 
 
