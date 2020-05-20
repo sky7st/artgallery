@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use App\Artist;
+use Validator;
 class ArtistController extends Controller
 {
     /**
@@ -14,73 +14,62 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        // $results = DB::select('select * from artist', array(1));
-        // $results = DB::table('artist')->get();
-        $results = Artist::all();
+        $results = Artist::paginate(10);
         return view('pages.artist.index', [
             "artists" => $results
         ]);
     }
 
-    public function insert(Request $request){
-        $ssn = $request->input('ssn'); 
-        $name = $request->input('name'); 
-        $phone = $request->input('phone'); 
-        $add = $request->input('add'); 
-        $umedium = $request->input('umedium'); 
-        $ustyle = $request->input('ustyle'); 
-        $utype = $request->input('utype'); 
-        $sly = $request->input('sly'); 
-        $sytd = $request->input('sytd'); 
-
-        //check code todo
-
-        // DB::table('artist')->insert([
-        //     [
-        //         'artist_ssn' => $ssn,
-        //         'name' => $name,
-        //         'address' => $add,
-        //         'phone' => $phone,
-        //         'usual_type' => $utype,
-        //         'usual_medium' => $umedium,
-        //         'usual_style' => $ustyle,
-        //         'sales_last_year' => $sly,
-        //         'sales_year_to_date' => $sytd
-        //     ]
-        // ]);        
-        return redirect('/');
-    }
-
-    public function insertIndex(){
-        return view('pages.artist.insert');
-    }
-
-    //todo
-    public function update(Request $request){
-        $ssn = $request->input('ssn'); 
-        $name = $request->input('name'); 
-        $phone = $request->input('phone'); 
-        $add = $request->input('add'); 
-        $umedium = $request->input('umedium'); 
-        $ustyle = $request->input('ustyle'); 
-        $utype = $request->input('utype'); 
-        $sly = $request->input('sly'); 
-        $sytd = $request->input('sytd'); 
-       
-        return redirect('/');
-    }
-
-    public function updateIndex(){
-        return view('pages.artist.insert');
-    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'ssn' => 'required',
+            'name' => 'required',
+            'phone' => 'required',
+            'add' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'msg' => 'err',
+                'err' => $validator->errors()
+            ]);
+        }
+        $ssn = $request->input('ssn'); 
+        $name = $request->input('name'); 
+        $phone = $request->input('phone'); 
+        $add = $request->input('add'); 
+        $umedium = $request->input('umedium'); 
+        $ustyle = $request->input('ustyle'); 
+        $utype = $request->input('utype'); 
+
+        $artist = new Artist;
+        $artist->artist_ssn = $ssn; 
+        $artist->name = $name; 
+        $artist->address = $add; 
+        $artist->phone = $phone; 
+        $artist->usual_type = $utype; 
+        $artist->usual_medium = $umedium; 
+        $artist->usual_style = $ustyle; 
+
+        $newArtist = $artist->save();
+        if(!$newArtist){
+            return response()->json([
+                'msg' => 'err',
+                'err' => 'insert err!'
+            ]);
+        }else{
+            return response()->json([
+                'msg' => 'success',
+                'data' => [
+                    'lastPage' => $artist->paginate(10)->lastPage()
+                ]
+            ]);
+        }
     }
 
     /**
@@ -102,13 +91,15 @@ class ArtistController extends Controller
      */
     public function show($id)
     {
-        $result = Artist::where('id', $id)->first();
+        $artist = Artist::where('id', $id);
+        if($artist->exists()){
+            $artist = $artist->first();
+            return view('pages.artist.show', [
+                "artist" => $artist
+            ]);
+        }else{
 
-        //todo check
-
-        return view('pages.artist.show', [
-            "artist" => $result
-        ]);
+        }  
     }
 
     /**
@@ -117,9 +108,55 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'phone' => 'required',
+            'add' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'msg' => 'err',
+                'err' => $validator->errors()
+            ]);
+        }
+        $name = $request->input('name'); 
+        $phone = $request->input('phone'); 
+        $add = $request->input('add'); 
+        $umedium = $request->input('umedium'); 
+        $ustyle = $request->input('ustyle'); 
+        $utype = $request->input('utype'); 
+       
+        $data = [
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $add,
+            'usual_type' => $utype,
+            'usual_medium' => $umedium,
+            'usual_style' => $ustyle
+        ];
+
+        $artist = Artist::where('id', $id);
+        if($artist->exists())
+            $artist = $artist->first();
+        else
+            return response()->json([
+                'msg' => 'err',
+                'err' => 'artist does not exist'
+            ]); 
+        $updated = $artist->update($data);
+        if(!$updated){
+            return response()->json([
+                'msg' => 'err',
+                'err' => $validator->errors()
+            ]);
+        }else{
+            return response()->json([
+                'msg' => 'success',
+                'err' => ''
+            ]);
+        }
     }
 
     /**
@@ -132,31 +169,27 @@ class ArtistController extends Controller
     {
         if(!is_numeric($id))
             return response()->json([
-                'message' => 'error',
-                'err' => "id is not numeric"
+                'msg' => 'error',
+                'err' => 'id is not numeric'
             ]);
         else{
-            $artist = Artist::where("id", $id)->first();
-            if(isset($artist))
-                
-                $artist->delete();
-            //     if(!$res)
-            //         return response()->json([
-            //             'message' => 'error',
-            //             'err' => "delete error"
-            //         ]); 
-            //     else
-            //         return response()->json([
-            //             'message' => 'true',
-            //             'err' => ""
-            //         ]);
-            // }
-            // return response()->json([
-            //     'message' => 'error',
-            //     'err' => "id does not exists"
-            // ]);
-                // return response()->json($artist->toJson());
-                return redirect('/artist');
+            $delete = Artist::where('id', $id)->first()->delete();
+            $resp = [];
+            if(!$delete){
+                $resp = [
+                    'msg' => 'err',
+                    'err' => 'delete error!!!'
+                ];
+            }else{
+                $resp = [
+                    'msg' => 'success'
+                ];
+            }
+            $lastPage = Artist::paginate(10)->lastPage();
+            $resp['data'] = [
+                'lastPage' => $lastPage
+            ];
+            return response()->json($resp);
         }
     }
 }

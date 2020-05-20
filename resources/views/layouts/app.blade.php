@@ -16,7 +16,7 @@
 
     @include('include.navbar')
 
-    <main class="container mt-4">
+    <main class="container mt-3">
         @yield('content')
     </main>
 

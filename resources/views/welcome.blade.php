@@ -66,8 +66,7 @@
     <body>
         <div class="flex-center position-ref full-height">
             <?php 
-                $results = DB::select('select * from artist where artist_ssn = "043-08-7564"', array(1));
-                echo var_dump($results);
+                echo 'Home';
             ?>
 
         </div>
