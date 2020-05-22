@@ -3,7 +3,8 @@
 use Illuminate\Database\Seeder;
 use App\Artist;
 use App\User;
-use App\Role;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class ArtistSeeder extends Seeder
 {
     /**
@@ -13,6 +14,8 @@ class ArtistSeeder extends Seeder
      */
     public function run()
     {
+        //create artist Role and Permission
+
         $artists = [];
         $f = fopen( base_path()."/database/seeds/artist_parsed.csv", "r");
         while (($data = fgetcsv($f, 1000, ",")) !== FALSE) 
@@ -20,7 +23,7 @@ class ArtistSeeder extends Seeder
             $artists[] = $data;
         }
         fclose($f);
-        $role_artist = Role::where('name', 'artist')->first();
+
         foreach($artists as $i=>$row){
             if($i !== 0){
                 $artist = new Artist;
@@ -39,8 +42,8 @@ class ArtistSeeder extends Seeder
                 $user->name = $row[1];
                 $user->email = "artist".$i."@mail.com";
                 $user->password = Hash::make('password');
+                $user->assignRole('artist');
                 $user->save();
-                $user->roles()->attach($role_artist);
             } 
         }
     }

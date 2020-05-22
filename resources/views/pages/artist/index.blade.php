@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('content')
 @auth
+@can("update artist data")
 <div id="artist-top-bar">
   <button class="btn btn-primary" data-toggle="modal" data-target="#insertArtist">Insert</button>
 </div>
+@endcan
 @endauth
 <div id="artist-list" class="table-responsive-xl mt-2">
   <table class="table table-bordered table-condensed table-striped table-hover" id="artist_list" data-toggle="table" data-strip="true" data-pagination="true">

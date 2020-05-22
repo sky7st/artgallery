@@ -3,11 +3,11 @@
 <div class="row">
   <div class="col">
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
-    @auth
-      @if(Auth::user()->hasRole("artist"))
+    {{-- @auth
+      @if(Auth::user()->hasRole("artist")) --}}
         <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>    
-      @endif
-    @endauth
+      {{-- @endif
+    @endauth --}}
   </div>
 </div>
 <div class="row mt-2">
@@ -83,6 +83,8 @@
   </div>
 </div>
 <script>
+// @auth
+//   @if(Auth::user()->hasRole("artist"))
   $("#modalUpdateConfirm").click(function(e) {
     var form = $("#updateArtistForm")[0];
     var action = $(form).attr('action')
@@ -103,5 +105,7 @@
       })
     }
   })
+//   @endif
+// @endauth
 </script>
 @endsection
