@@ -185,7 +185,7 @@ class ArtistController extends Controller
                     'msg' => 'success'
                 ];
             }
-            $lastPage = Artist::paginate(10)->lastPage();
+            $lastPage = Artist::paginate(10)->currentPage();
             $resp['data'] = [
                 'lastPage' => $lastPage
             ];

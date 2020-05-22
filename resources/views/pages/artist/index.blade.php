@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @section('content')
+@auth
 <div id="artist-top-bar">
   <button class="btn btn-primary" data-toggle="modal" data-target="#insertArtist">Insert</button>
 </div>
+@endauth
 <div id="artist-list" class="table-responsive-xl mt-2">
   <table class="table table-bordered table-condensed table-striped table-hover" id="artist_list" data-toggle="table" data-strip="true" data-pagination="true">
     <thead class="col-auto">
@@ -66,7 +68,7 @@
           <div class="form-row">
               <div class="form-group col">
                   <label for="ssn">SSN</label>
-                  <input id="ssn" name="ssn" type="text" class="form-control" value="">
+                  <input id="ssn" name="ssn" type="text" class="form-control" value="" required>
               </div>
               <div class="form-group col">
                   <label for="name">Name</label>

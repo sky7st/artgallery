@@ -3,7 +3,11 @@
 <div class="row">
   <div class="col">
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
-    <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>
+    @auth
+      @if(Auth::user()->hasRole("artist"))
+        <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>    
+      @endif
+    @endauth
   </div>
 </div>
 <div class="row mt-2">
@@ -19,8 +23,8 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-      {{ var_dump($artist) }}
+  <div class="col-sm-6 text-center">
+      <h4>Art List</h4>
   </div>
 </div>
 <div id="updateArtist" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertArtistModalLabel" aria-hidden="true">

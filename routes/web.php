@@ -22,6 +22,6 @@ Route::post('/artist/insert', "ArtistController@create");
 Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.update');
 
 
+Auth::routes();
 
-
-
+Route::get('/home', 'HomeController@index')->name('home');
