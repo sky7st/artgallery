@@ -4,7 +4,9 @@
   <div class="col">
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
     @can('update artist data')
+      @can('isHimSelf', $artist->user, Auth::user())
         <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>    
+      @endcan
     @endcan
   </div>
 </div>
@@ -81,29 +83,29 @@
   </div>
 </div>
 <script>
-// @auth
-//   @if(Auth::user()->hasRole("artist"))
-  $("#modalUpdateConfirm").click(function(e) {
-    var form = $("#updateArtistForm")[0];
-    var action = $(form).attr('action')
-    if(form.reportValidity()){
-      $.ajax({
-        url: action,
-        type: "POST",
-        data: $(form).serialize(),
-        success: function (response){
-          console.log(response)
-          if(response.msg === "success"){
-            alert('Update success')
-          }else{
-            alert("err: " + response.err)
-          }
-          location.reload()
+  @can('update artist data')
+    @can('isHimSelf', $artist->user, Auth::user())
+      $("#modalUpdateConfirm").click(function(e) {
+        var form = $("#updateArtistForm")[0];
+        var action = $(form).attr('action')
+        if(form.reportValidity()){
+          $.ajax({
+            url: action,
+            type: "POST",
+            data: $(form).serialize(),
+            success: function (response){
+              console.log(response)
+              if(response.msg === "success"){
+                alert('Update success')
+              }else{
+                alert("err: " + response.err)
+              }
+              location.reload()
+            }
+          })
         }
       })
-    }
-  })
-//   @endif
-// @endauth
+    @endcan
+  @endcan
 </script>
 @endsection

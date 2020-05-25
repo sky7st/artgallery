@@ -17,9 +17,9 @@ Route::get('/', function () {
 
 Route::get('/artist', 'ArtistController@index')->name('pages.artist.index');
 Route::get('/artist/{id}', 'ArtistController@show')->name('pages.artist.show');
-Route::get('/artist/{id}/delete', 'ArtistController@destroy');
+Route::get('/artist/{id}/delete', 'ArtistController@destroy')->middleware('can:update artist data');
 Route::post('/artist/insert', "ArtistController@create");
-Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.update');
+Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.update')->middleware('can:update artist data');
 
 
 Auth::routes();

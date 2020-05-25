@@ -36,6 +36,7 @@ class ArtistSeeder extends Seeder
                 $artist->usual_style = $row[6];
                 $artist->sales_last_year = (int)$row[7];
                 $artist->sales_year_to_date = (int)$row[8];
+                $artist->artist_email = "artist".$i."@mail.com";
                 $artist->save();
                 
                 $user = new User;

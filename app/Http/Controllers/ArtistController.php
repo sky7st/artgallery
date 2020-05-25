@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Artist;
+use App\User;
 use Validator;
 use Auth;
 class ArtistController extends Controller
@@ -111,6 +112,8 @@ class ArtistController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        $user = Artist::where('id', $id)->first()->user;
+        $this->authorize('isHimSelf', $user, User::class);
         $validator = Validator::make($request->all(),[
             'name' => 'required',
             'phone' => 'required',
