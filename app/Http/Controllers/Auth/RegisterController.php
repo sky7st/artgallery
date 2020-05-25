@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -22,6 +24,16 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    public function showRegistrationForm()
+    {
+
+        $roles = Permission::whereName('can be registered')->first()->roles;
+
+        return view('auth.register', [
+            'regRoles' => $roles
+        ]);
+
+    }
 
     /**
      * Where to redirect users after registration.
@@ -48,7 +60,14 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $validArr = [];
+        $roles = Permission::whereName('can be registered')->first()->roles;
+        foreach($roles as $role){
+            array_push($validArr, $role->id);
+        }
+        $valid = "in:".join(",", $validArr);
         return Validator::make($data, [
+            'role' => ['required', 'integer', $valid],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -69,7 +88,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
         $user->roles()
-            ->attach(Role::where('name', 'artist')->first());
+            ->attach(Role::where('id', $data['role'])->first());
         return $user;
     }
 }

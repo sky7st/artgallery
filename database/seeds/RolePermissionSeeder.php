@@ -12,17 +12,60 @@ class RolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        try {
-            $role = Role::create([
-                'name' => 'artist'
-            ]);
-            $permission = Permission::create([
-                'name' => 'update artist data'
-            ]);
-            $role->syncPermissions($permission);
-        } catch (\Throwable $th) {
-            echo $th;
-        }
+        $roleAdmin = Role::create([
+            'name' => 'admin'
+        ]);
+        $roleArtist = Role::create([
+            'name' => 'artist'
+        ]);
+        $roleCustomer = Role::create([
+            'name' => 'customer'
+        ]);
+        $roleOwner = Role::create([
+            'name' => 'owner'
+        ]);
+        $roleSaler = Role::create([
+            'name' => 'saler'
+        ]);
+        $permissionArtistUpdate = Permission::create([
+            'name' => 'update artist data'
+        ]);
+        $permissionCustomerUpdate = Permission::create([
+            'name' => 'update customer data'
+        ]);
+        $permissionOwnerUpdate = Permission::create([
+            'name' => 'update owner data'
+        ]);
+        $permissionSalerUpdate = Permission::create([
+            'name' => 'update saler data'
+        ]);
         
+        $permissionCanBeReg = Permission::create([
+            'name' => 'can be registered'
+        ]);
+
+        $roleAdmin->syncPermissions([
+            $permissionArtistUpdate,
+            $permissionCustomerUpdate,
+            $permissionOwnerUpdate,
+            $permissionSalerUpdate
+        ]);
+        
+        $roleArtist->syncPermissions([
+            $permissionArtistUpdate,
+            $permissionCanBeReg
+        ]);
+        $roleCustomer->syncPermissions([
+            $permissionCustomerUpdate,
+            $permissionCanBeReg
+        ]);
+        $roleOwner->syncPermissions([
+            $permissionOwnerUpdate,
+            $permissionCanBeReg
+        ]);
+        $roleSaler->syncPermissions([
+            $permissionSalerUpdate
+        ]);
+
     }
 }
