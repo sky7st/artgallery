@@ -15,6 +15,7 @@
                     @endif
 
                     You are logged in!
+                    {{ Auth::user()->roles()->get()->first()->name}}
                 </div>
             </div>
         </div>

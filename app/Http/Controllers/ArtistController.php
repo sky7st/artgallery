@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Artist;
 use Validator;
+use Auth;
 class ArtistController extends Controller
 {
     /**

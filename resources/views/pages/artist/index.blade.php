@@ -18,7 +18,9 @@
           <th data-field="usual_type">Type</th>
           <th data-field="usual_medium">Medium</th>
           <th data-field="usual_style">Style</th>
-          <th data-field="delete_artist">Delete</th>
+          @can("delete artist")
+            <th data-field="delete_artist">Delete</th>
+          @endcan
         </tr>
     </thead>
     @foreach ($artists as $artist)
@@ -30,7 +32,9 @@
         <th>{{ $artist->usual_type }}</th>
         <th>{{ $artist->usual_medium }}</th>
         <th>{{ $artist->usual_style }}</th>
-        <th><button class="delete_artist btn btn-danger" data-delete="{{$artist->id}}">Delete</button> </th>
+        @can("delete artist")
+          <th><button class="delete_artist btn btn-danger" data-delete="{{$artist->id}}">Delete</button> </th>
+        @endcan
       </tr>
     @endforeach     
   </table>

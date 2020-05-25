@@ -3,18 +3,16 @@
 <div class="row">
   <div class="col">
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
-    {{-- @auth
-      @if(Auth::user()->hasRole("artist")) --}}
+    @can('update artist data')
         <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>    
-      {{-- @endif
-    @endauth --}}
+    @endcan
   </div>
 </div>
 <div class="row mt-2">
   <div class="col-6">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">{{ $artist->name }}</h3>
+      <h3 class="card-title">{{ $artist->name }}</h3>
         <p class="card-text">Address: {{ $artist->address }}</p>
         <p class="card-text">Phone: {{ $artist->phone }}</p>
         <p class="card-text">Type: {{ $artist->usual_type }}</p>
