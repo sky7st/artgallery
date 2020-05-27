@@ -72,37 +72,37 @@
                         <div class="form-row">
                             <div class="form-group col">
                                 <label for="ssn">SSN</label>
-                            <input id="ssn" name="ssn" type="text" class="form-control @error('ssn') is-invalid @enderror" value="" required>
-                            @error('ssn')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                                <input id="ssn" name="ssn" type="text" class="form-control @error('ssn') is-invalid @enderror" value="" required>
+                                @error('ssn')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="form-group col">
                                 <label for="phone">Phone</label>
-                                <input id="phone" name="phone" type="text" class="form-control" value="" required>
+                                <input id="phone" name="phone" type="text" class="form-control" value="{{ old('phone') }}" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col">
                               <label for="add">Address</label>
-                              <input id="add" name="add" type="text" class="form-control" value="" required>
+                              <input id="add" name="add" type="text" class="form-control" value="{{ old('add') }}" required>
                             </div>
                         </div>
                         <div class="form-row" id="usual-art">
                             <div class="form-group col">
                                 <label for="umedium">Usual Medium</label>
-                                <input id="umedium" name="umedium" type="text" class="form-control" value="">
+                                <input id="umedium" name="umedium" type="text" class="form-control" value="{{ old('umedium') }}">
                             </div>
                             <div class="form-group col">
                                 <label for="ustyle">Usual Style</label>
-                                <input id="ustyle" name="ustyle" type="text" class="form-control" value="">
+                                <input id="ustyle" name="ustyle" type="text" class="form-control" value="{{ old('ustyle') }}">
                             </div>
                             <div class="form-group col">
                                 <label for="utype">Usual Type</label>
-                                <input id="utype" name="utype" type="text" class="form-control" value="">
+                                <input id="utype" name="utype" type="text" class="form-control" value="{{ old('utype') }}">
                             </div>
                         </div>
                         <div class="form-group row mb-0">
