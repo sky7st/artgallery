@@ -10,6 +10,8 @@ class Artist extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'artist_ssn',
+        'artist_email',
         'name',
         'address',
         'phone',

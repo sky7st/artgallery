@@ -61,7 +61,7 @@ class RolePermissionSeeder extends Seeder
         ]);
         $roleOwner->syncPermissions([
             $permissionOwnerUpdate,
-            $permissionCanBeReg
+            // $permissionCanBeReg
         ]);
         $roleSaler->syncPermissions([
             $permissionSalerUpdate

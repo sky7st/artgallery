@@ -6,6 +6,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Artist;
+use App\Customer;
+use App\Saler;
+use App\Admin;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -36,7 +40,41 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+    public function artist()
+    {
+        return $this->hasOne('App\Artist', 'artist_email', 'email');
+    }
+    public function customer()
+    {
+        return $this->hasOne('App\Customer', 'customer_email', 'email');
+    }
+
+    public function saler()
+    {
+        return $this->hasOne('App\Saler', 'saler_email', 'email');
+    }
+
+    public function admin()
+    {
+        return $this->hasOne('App\Admin', 'admin_email', 'email');
+    }
+
+    public static function existSSn($ssn){
+        $result = Artist::where('artist_ssn', $ssn);
+        if($result->exists())
+            return true;
+        $result = Customer::where('customer_ssn', $ssn);
+        if($result->exists())
+            return true;
+        $result = Saler::where('saler_ssn', $ssn);
+        if($result->exists())
+            return true;
+        $result = Admin::where('admin_ssn', $ssn);
+        if($result->exists())
+            return true;
+        return false;
+    }
+
     // public function role()
     // {
     //     return $this->belongsTo('Role', 'role_id', 'id');

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Validation\Rule;
 class RegisterController extends Controller
 {
     /*
@@ -40,7 +40,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/artist';
 
     /**
      * Create a new controller instance.
@@ -71,6 +71,16 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'ssn' => [
+                'required', 
+                'string', 
+                'unique:artist,artist_ssn',
+                'unique:customer,customer_ssn',
+                'unique:saler,saler_ssn',
+                'unique:admin,admin_ssn',
+            ],
+            'phone' => ['required', 'string'],
+            'add' => ['required', 'string']
         ]);
     }
 
@@ -82,13 +92,43 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        $role = Role::where('id', $data['role'])->first();
         $user->roles()
-            ->attach(Role::where('id', $data['role'])->first());
+            ->attach($role);
+        switch ($role->name) {
+            case 'artist':
+                $artist = [
+                    'artist_ssn '=> $data['ssn'],
+                    'artist_email' => $data['email'],
+                    'name' => $data['name'],
+                    'address' => $data['add'],
+                    'phone' => $data['phone'],
+                    'usual_type' => $data['utype'],
+                    'usual_medium' => $data['umedium'],
+                    'usual_style' => $data['ustyle']
+                ];
+                $user->artist()->create($artist);
+                break;
+            case 'customer':
+                $customer = [
+                    'customer_ssn '=> $data['ssn'],
+                    'customer_email' => $data['email'],
+                    'name' => $data['name'],
+                    'address' => $data['add'],
+                    'phone' => $data['phone']
+                ];
+                $user->customer()->create($customer);
+            default:
+                # code...
+                break;
+        }
+        
         return $user;
     }
 }
