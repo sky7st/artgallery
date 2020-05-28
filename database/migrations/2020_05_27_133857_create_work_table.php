@@ -15,7 +15,19 @@ class CreateWorkTable extends Migration
     {
         Schema::create('work', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('title');
+            $table->string('artist_id');
+            $table->string('type')->nullable();
+            $table->string('medium')->nullable();
+            $table->string('style')->nullable();
+            $table->string('size')->nullable();
+            $table->string('image_path')->nullable();
+            $table->string('asking_price');
+            $table->date('date_of_show')->nullable();
+            $table->date('date_sold')->nullable();
             $table->timestamps();
+
+            $table->unique(['title', 'artist_id']);
         });
     }
 
