@@ -28,7 +28,6 @@ class WorkSeeder extends Seeder
             $filethumb = uniqid('img_');
             Storage::disk('public')->put('images/arts/thumb/'.$filethumb, $thumbnail, 'public');
 
-
             $work = new Work;
             $work->title = "Me Sucks".$i;
             $work->artist_id = 1;
@@ -38,8 +37,8 @@ class WorkSeeder extends Seeder
             $work->size = "720X720";
             $work->image_path = $fileorg;
             $work->image_thumb = $filethumb;
-            $work->asking_price = 9487;
-            $work->descript = "Yes! I really suck!";
+            $work->asking_price = 9487+$i;
+            $work->descript = str_repeat("Yes! I really suck!\n", 5);
             $work->save();
         }
     }

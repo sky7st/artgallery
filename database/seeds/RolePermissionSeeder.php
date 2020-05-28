@@ -30,8 +30,14 @@ class RolePermissionSeeder extends Seeder
         $permissionArtistUpdate = Permission::create([
             'name' => 'update artist data'
         ]);
+        $permissionAddWork = Permission::create([
+            'name' => 'add new work'
+        ]);
         $permissionCustomerUpdate = Permission::create([
             'name' => 'update customer data'
+        ]);
+        $permissionCustomerBuy = Permission::create([
+            'name' => 'buy works'
         ]);
         $permissionOwnerUpdate = Permission::create([
             'name' => 'update owner data'
@@ -53,10 +59,12 @@ class RolePermissionSeeder extends Seeder
         
         $roleArtist->syncPermissions([
             $permissionArtistUpdate,
+            $permissionAddWork,
             $permissionCanBeReg
         ]);
         $roleCustomer->syncPermissions([
             $permissionCustomerUpdate,
+            $permissionCustomerBuy,
             $permissionCanBeReg
         ]);
         $roleOwner->syncPermissions([

@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/artist', 'ArtistController@index')->name('pages.artist.index');
 Route::get('/artist/{id}', 'ArtistController@show')->name('pages.artist.show');
@@ -21,6 +19,7 @@ Route::get('/artist/{id}/delete', 'ArtistController@destroy')->middleware('can:u
 Route::post('/artist/insert', "ArtistController@create");
 Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.update')->middleware('can:update artist data');
 
+Route::get('/work/{id}', 'WorkController@show');
 
 Auth::routes();
 

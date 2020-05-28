@@ -21,14 +21,21 @@ class LoginController extends Controller
     use AuthenticatesUsers{
         logout as performLogout;
     }
-
+    public function showLoginForm()
+    {
+        session(['link' => url()->previous()]);
+        return view('auth.login');   
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect(session('link'));
+    }
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
     protected $redirectTo = '/artist';
-
     /**
      * Create a new controller instance.
      *
