@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Artist;
 use App\User;
+use App\Work;
 use Validator;
 use Auth;
 class ArtistController extends Controller
@@ -94,10 +95,15 @@ class ArtistController extends Controller
     public function show($id)
     {
         $artist = Artist::where('id', $id);
+
+        $works = Work::where('artist_id', $id)->select('id','title','image_thumb', 'asking_price')->get();
+        // $works = Work::where('artist_id', $id);
+
         if($artist->exists()){
             $artist = $artist->first();
             return view('pages.artist.show', [
-                "artist" => $artist
+                "artist" => $artist,
+                "works" => $works
             ]);
         }else{
 

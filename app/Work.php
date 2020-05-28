@@ -16,6 +16,8 @@ class Work extends Model
         'medium',
         'style',
         'size',
+        'discript',
+        'image_thumb',
         'image_path',
         'asking_price',
         'date_of_show',

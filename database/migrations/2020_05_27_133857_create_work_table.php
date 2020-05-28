@@ -21,6 +21,8 @@ class CreateWorkTable extends Migration
             $table->string('medium')->nullable();
             $table->string('style')->nullable();
             $table->string('size')->nullable();
+            $table->string('descript')->nullable();
+            $table->string('image_thumb')->nullable();
             $table->string('image_path')->nullable();
             $table->string('asking_price');
             $table->date('date_of_show')->nullable();
