@@ -130,10 +130,4 @@
         }
     })
 </script>
-<style>
-  mark {
-    background-color: white;
-    color: red;
-  }
-</style>
 @endsection
