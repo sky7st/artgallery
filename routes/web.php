@@ -20,7 +20,7 @@ Route::post('/artist/insert', "ArtistController@create");
 Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.update')->middleware('can:update artist data');
 
 Route::get('/work/{id}', 'WorkController@show');
-
+Route::post('/work/insert', "WorkController@create")->middleware("can:add new work");
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
