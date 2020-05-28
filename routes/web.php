@@ -21,6 +21,7 @@ Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.
 
 Route::get('/work/{id}', 'WorkController@show');
 Route::post('/work/insert', "WorkController@create")->middleware("can:add new work");
+Route::get('/work/{id}/delete', "WorkController@destroy")->middleware("can:delete work");
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Work;
 use App\Artist;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -156,6 +157,21 @@ class WorkController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $work = Work::find($id);
+        if($work->exists()){
+            $user = $work->artist->user;
+            $this->authorize('isHimSelf', $user, User::class);
+            $deleted = $work->delete();
+            if($deleted){
+                return response()->json([
+                    'msg' => 'success',
+                    'err' => ''
+                ]);
+            }
+        }
+        return response()->json([
+            'msg' => 'error',
+            'err' => 'unknown'
+        ]);
     }
 }

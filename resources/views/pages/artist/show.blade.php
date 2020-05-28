@@ -36,7 +36,14 @@
       <div class="container">
         <ul class="d-flex flex-wrap list-group-horizontal">
           @foreach ($works as $index=>$work)
-            <li class="list-group-item justify-content-between align-items-center ml-auto mt-2">
+            <li class="list-group-item justify-content-left align-items-center mr-auto mt-2">
+              @can('delete work')
+                @can('isHimSelf', $artist->user, Auth::user())
+                  <button type="button" id="deleteWorkBtn" class="delete-work close align-items-right mb-1">
+                  <span aria-hidden="true" data-work="{{ $work->id }}" data-title="{{ $work->title }}">&times;</span>
+                  </button>
+                @endcan
+              @endcan
               <div class="work-info">
                 <a href="{{ '/work/'.$work->id }}">
                   <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 200px; max-height: 250px;" alt="no image">
@@ -208,6 +215,32 @@
     </div>
   @endcan
 @endcan
+@can('delete work')
+  @can('isHimSelf', $artist->user, Auth::user())
+    <div id="deleteWorkModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteWorkModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Work</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="delete-check">
+            <input type="hidden" name="id" value="-1" id="deleteWorkId"/>
+            <div class="confirm-text text-danger">
+                
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="deleteWorkConfirm" class="btn btn-danger">Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endcan
+@endcan 
 <script>
   @can('update artist data')
     @can('isHimSelf', $artist->user, Auth::user())
@@ -296,7 +329,37 @@
         }
       }
     @endcan
-  @endcan    
+  @endcan  
+  @can('delete work')
+    @can('isHimSelf', $artist->user, Auth::user()) 
+    $(document).ready(function ($) {
+      $('.delete-work').click(function (event) {
+        var id = $(event.target).data('work')
+        var title = $(event.target).data('title')
+        $('.confirm-text').html("Do you sure you want to delete <br> "+title + " ?" )
+        $('#deleteWorkId').val(id)
+        $('#deleteWorkModal').modal('show')
+      })
+      $('#deleteWorkConfirm').click(function (event) {
+        var id = $('#deleteWorkId').val()
+        $.ajax({
+          method: "GET",
+          url: "/work/" + id + "/delete",
+          success: function (response) {
+            console.log(response)
+            if(response.msg === "success"){
+              $('#deleteWorkModal').modal('hide')
+              alert('Delete success!')
+              location.reload()
+            }else{
+              
+            }
+          }
+        })
+      })
+    })
+    @endcan
+  @endcan 
 </script>
 <style>
   .table-row {
@@ -313,6 +376,10 @@
     width: 100%;
     object-fit: cover;
     height: 100%;
+  }
+  .close:focus{
+    outline: none;
+    box-shadow: none;
   }
 </style>
 @endsection
