@@ -5,7 +5,12 @@
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
     @can('update artist data')
       @can('isHimSelf', $artist->user, Auth::user())
-        <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update</button>    
+        <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#updateArtist">Update Your Data</button>    
+      @endcan
+    @endcan
+    @can('add new work')
+      @can('isHimSelf', $artist->user, Auth::user())
+        <button class="btn btn-primary ml-1"  data-toggle="modal" data-target="#add_work">Add New Work</button>    
       @endcan
     @endcan
   </div>
@@ -53,102 +58,97 @@
       </div>
     </div>
   </div>
-  {{-- <div class="col-6 mt-2">
-    <div class="table-responsive-xl mt-2">
-      <table class="table table-bordered table-condensed table-striped table-hover" id="work_list" data-toggle="table" data-strip="true" data-pagination="true">
-        <thead class="">
-            <tr class="d-flex">
-              <th data-field="index" class="col-2">Index</th>
-              <th data-field="title" class="text-center col-10">Works</th>
-            </tr>
-        </thead>
-        @foreach ($works as $index=>$work)
-          <tr class="table-row d-flex">
-            <input id="work_id" type="hidden" value="{{ $work->id }}"/>
-            <th class="col-2">{{ $index }}</th>
-            <th class="col-10">{{ $work->title }}</th>
-          </tr>
-        @endforeach   
-      </table>
-    </div>
-  </div>--}}
 </div>
-
-<div id="updateArtist" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertArtistModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Update Artist</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form id="updateArtistForm" method="POST" action="{{ route('pages.artist.update', $artist->id) }}">
-          @csrf
-          <div class="form-row">
-              <div class="form-group col">
-                  <label for="ssn">SSN</label>
-              <input id="ssn" name="ssn" type="text" class="form-control" value="{{ $artist->artist_ssn }}" disabled>
-              </div>
-              <div class="form-group col">
-                  <label for="name">Name</label>
-                  <input id="name" name="name" type="text" class="form-control" value="{{ $artist->name }}" required>
-              </div>
-              <div class="form-group col">
-                  <label for="phone">Phone</label>
-                  <input id="phone" name="phone" type="text" class="form-control" value="{{ $artist->phone }}" required>
-              </div>
+@can('update artist data')
+  @can('isHimSelf', $artist->user, Auth::user())
+    <div id="updateArtist" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insertArtistModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Update Artist</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="form-row">
-              <div class="form-group col">
-                <label for="add">Address</label>
-                <input id="add" name="add" type="text" class="form-control" value="{{ $artist->address }}" required>
+          <div class="modal-body">
+          <form id="updateArtistForm" method="POST" action="{{ route('pages.artist.update', $artist->id) }}">
+              @csrf
+              <div class="form-row">
+                  <div class="form-group col">
+                      <label for="ssn">SSN</label>
+                  <input id="ssn" name="ssn" type="text" class="form-control" value="{{ $artist->artist_ssn }}" disabled>
+                  </div>
+                  <div class="form-group col">
+                      <label for="name">Name</label>
+                      <input id="name" name="name" type="text" class="form-control" value="{{ $artist->name }}" required>
+                  </div>
+                  <div class="form-group col">
+                      <label for="phone">Phone</label>
+                      <input id="phone" name="phone" type="text" class="form-control" value="{{ $artist->phone }}" required>
+                  </div>
               </div>
+              <div class="form-row">
+                  <div class="form-group col">
+                    <label for="add">Address</label>
+                    <input id="add" name="add" type="text" class="form-control" value="{{ $artist->address }}" required>
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div class="form-group col">
+                      <label for="umedium">Usual Medium</label>
+                      <input id="umedium" name="umedium" type="text" class="form-control" value="{{ $artist->usual_medium }}">
+                  </div>
+                  <div class="form-group col">
+                      <label for="ustyle">Usual Style</label>
+                      <input id="ustyle" name="ustyle" type="text" class="form-control" value="{{ $artist->usual_style }}">
+                  </div>
+                  <div class="form-group col">
+                      <label for="utype">Usual Type</label>
+                      <input id="utype" name="utype" type="text" class="form-control" value="{{ $artist->usual_type }}">
+                  </div>
+              </div>
+            </form>
           </div>
-          <div class="form-row">
-              <div class="form-group col">
-                  <label for="umedium">Usual Medium</label>
-                  <input id="umedium" name="umedium" type="text" class="form-control" value="{{ $artist->usual_medium }}">
-              </div>
-              <div class="form-group col">
-                  <label for="ustyle">Usual Style</label>
-                  <input id="ustyle" name="ustyle" type="text" class="form-control" value="{{ $artist->usual_style }}">
-              </div>
-              <div class="form-group col">
-                  <label for="utype">Usual Type</label>
-                  <input id="utype" name="utype" type="text" class="form-control" value="{{ $artist->usual_type }}">
-              </div>
+          <div class="modal-footer">
+            <button type="button" id="modalUpdateConfirm" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="modalUpdateConfirm" class="btn btn-primary">Update</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="work_data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="workDataModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Work</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body col-6">
-        <div class="card">
-          Text Data
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+    </div>
+  @endcan
+@endcan
+@can('add new work')
+  @can('isHimSelf', $artist->user, Auth::user())
+    <div id="add_work" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="workDataModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add New Work</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body col-6">
+            <form id="NewWorkForm">
+              <div class="form-group">
+                <label for="workImage">Work Image</label>
+                <input type="file" class="form-control-file" id="workImage">
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="5"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  @endcan
+@endcan
 <script>
   @can('update artist data')
     @can('isHimSelf', $artist->user, Auth::user())
@@ -174,27 +174,6 @@
       })
     @endcan
   @endcan
-  $(".table-row").click(function(e) {
-    if(!$(e.target).is("button")){
-      var id = $(this).find('#work_id').val();
-      var url = "/work/" + id;
-      // console.log(id)
-      $.ajax({
-        url: url,
-        type: "GET",
-        success: function(response){
-          if(response.msg === "success"){
-            var data = response.data;
-            var workData = data.workData;
-            console.log(data)
-            var modal = $("#work_data");
-            modal.find('.modal-title').text(workData.title)
-            modal.modal('show')
-          }
-        }
-      });
-    }   
-  });
 </script>
 <style>
   .table-row {
