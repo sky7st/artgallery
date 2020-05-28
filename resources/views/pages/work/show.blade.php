@@ -60,23 +60,26 @@
         </div>
       </div>
     </div>
-    <div class="want-buy row mt-4 text-left">
-      <div class="col">
-        <div class="row">
-          <label><b>WANT TO BUY?</b></label>
-        </div>
-        <div class="row">
-          @guest
-            <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE EQUIRY</a>   
-          @endguest
-          @auth
-            @can('buy works')
-            <a href="#" class="btn btn-primary btn-lg" id="make-equiry">MAKE EQUIRY</a> 
-            @endcan
-          @endauth
+    @can('isHimSelf', $work->artist->user, Auth::user())
+    @else
+      <div class="want-buy row mt-4 text-left">
+        <div class="col">
+          <div class="row">
+            <label><b>WANT TO BUY?</b></label>
+          </div>
+          <div class="row">
+            @guest
+              <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE EQUIRY</a>   
+            @endguest
+            @auth
+              @can('buy works')
+              <a href="#" class="btn btn-primary btn-lg" id="make-equiry">MAKE EQUIRY</a> 
+              @endcan
+            @endauth
+          </div>
         </div>
       </div>
-    </div>
+    @endcan
   </div>
 </div>
 <style>

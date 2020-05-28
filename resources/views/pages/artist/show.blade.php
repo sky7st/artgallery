@@ -39,7 +39,7 @@
             <li class="list-group-item justify-content-between align-items-center ml-auto mt-2">
               <div class="work-info">
                 <a href="{{ '/work/'.$work->id }}">
-                  <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 200px; max-height: 250px;">
+                  <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 200px; max-height: 250px;" alt="no image">
                 </a>
                 <div class="work-detail mt-1">
                   <span class="text-center">
@@ -129,19 +129,78 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body col-6">
-            <form id="NewWorkForm">
+          <div class="modal-body">
+            <form id="NewWorkForm" post="/work/insert" enctype='multipart/form-data'>
+              @csrf
               <div class="form-group">
-                <label for="workImage">Work Image</label>
-                <input type="file" class="form-control-file" id="workImage">
+                <label for="title"><mark>*</mark>Title</label>
+                <input type="text" class="form-control" id="title" name="title" aria-describedby="titleHelp" placeholder="Enter Title" required>
+                <small id="titleHelp" class="form-text text-muted">You can't use the title you had used before.</small>
+                <span class="error-title invalid-feedback" role="alert">  
+                </span>
               </div>
+              <div class="form-row" id="art-media">
+                <div class="form-group col">
+                  <label for="type"><mark>*</mark>Type</label>
+                  <input id="type" name="type" type="text" class="form-control" value="" placeholder="Enter Type" required>
+                  <span class="error-type invalid-feedback" role="alert">
+                  </span>
+                </div>
+                <div class="form-group col">
+                  <label for="style"><mark>*</mark>Style</label>
+                  <input id="style" name="style" type="text" class="form-control" value="" placeholder="Enter Style" required>
+                  <span class="error-style invalid-feedback" role="alert">
+                  </span>
+                </div>
+                <div class="form-group col">
+                  <label for="medium"><mark>*</mark>Medium</label>
+                  <input id="medium" name="medium" type="text" class="form-control" value="" placeholder="Enter Medium" required>
+                  <span class="error-medium invalid-feedback" role="alert">
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group-row" id="size-price">
+                    <label for="size"><mark>*</mark>Size</label>
+                    <input type="text" class="form-control" id="size" name="size" placeholder="Enter Size" required>
+                    <span class="invalid-size" role="alert">
+                    </span>
+                  </div>
+                  <div class="form-group-row mt-3">
+                    <label for="workImage"><mark>*</mark>Work Image</label>
+                    <input type="file" name="image" class="form-control-file" id="workImage" accept=".jpg,.bmp,.png,.jpeg" onchange="readImage(this);" required>
+                    <span class="error-image invalid-feedback" role="alert">
+                    </span>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group-row">
+                    <label for="price"><mark>*</mark>Asking Price</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="usDollar">$</span>
+                      </div>
+                      <input id="price" name="price" type="number" class="form-control" value="" placeholder="Enter Price" aria-describedby="usDollar" min="1" required> 
+                      <span class="error-price invalid-feedback" role="alert">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div id="preview-image-container" style="display: none;">
+                      <img src="" alt="" id="preview-image" class="img-responsive fit-image">
+                  </div>
+                </div>
+              </div>           
               <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="5"></textarea>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Add some description....."></textarea>
               </div>
             </form>
           </div>
           <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="addWorkBtn">Add</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
           </div>
         </div>
@@ -174,6 +233,70 @@
       })
     @endcan
   @endcan
+  @can('add new work')
+    @can('isHimSelf', $artist->user, Auth::user())
+      $('#add_work').on('hidden.bs.modal', function (e) {
+        $('#NewWorkForm').find("input, textarea").val("");
+        $('#preview-image')
+          .attr('src', '');
+        $('#preview-image-container').hide()
+        $('#NewWorkForm').find('input').removeClass('is-invalid')
+      })
+      $("#addWorkBtn").click(function (e) {
+        var form = $("#NewWorkForm")[0]
+        if(form.reportValidity()){
+          $(form).submit();    
+        }
+      })
+      $('#NewWorkForm').submit(function(event) {
+        event.preventDefault();
+        console.log('submit')
+        $.ajax({
+            type: "POST",
+            url: "/work/insert",
+            data: new FormData(this),
+            dataType:'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response){
+              console.log(response)
+              if(response.message === "success"){
+                alert("Insert new work success!!!")
+                location.reload()
+              }else{
+                alert("err:" + response.err)
+                // location.reload()
+              }
+            },
+            error: function (reject) {
+              if( reject.status === 422 ) {
+                var errors = reject.responseJSON.errors;
+                console.log(errors)
+
+                $.each(errors, function (key, val) {
+                  // $(".error-" + key).show();
+                  $("#"+key).addClass('is-invalid')
+                  $(".error-" + key).text(val[0]);
+                });
+              }
+            }
+          })
+    });
+      function readImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#preview-image')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+            $('#preview-image-container').show()
+        }
+      }
+    @endcan
+  @endcan    
 </script>
 <style>
   .table-row {
@@ -185,6 +308,11 @@
   {
     color: inherit;
     cursor:pointer;  
+  }
+  .fit-image{
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
   }
 </style>
 @endsection
