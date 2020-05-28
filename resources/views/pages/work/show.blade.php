@@ -16,7 +16,7 @@
     </div>
     <div class="price-info row text-left mt-3">
       <h2>
-      <span>asking price: ${{ $work->asking_price }}</span>
+      <span>${{ $work->asking_price }}</span>
       </h2>
     </div>
     <div class="work-detail row mt-5 text-left">
