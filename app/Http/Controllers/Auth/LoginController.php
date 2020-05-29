@@ -28,6 +28,10 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
+        if($user->roles->first()->name === "artist"){
+            $artist = $user->artist;
+            return redirect(route('pages.artist.show', $artist->id));
+        }
         return redirect(session('link'));
     }
     /**
