@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Admin', 'admin_email', 'email');
     }
 
+    public function enquirys()
+    {
+        return $this->hasMany('App\Enquiry', 'user_id', 'id');
+    }
+
     public static function existSSn($ssn){
         $result = Artist::where('artist_ssn', $ssn);
         if($result->exists())

@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Middleware\EnquiryAccess;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +22,15 @@ Route::post('/artist/{id}/update', "ArtistController@edit")->name('pages.artist.
 Route::get('/work/{id}', 'WorkController@show');
 Route::post('/work/insert', "WorkController@create")->middleware("can:add new work");
 Route::get('/work/{id}/delete', "WorkController@destroy")->middleware("can:delete work");
+
+
+
+Route::get('/enquiry', 'EnquiryController@index')->name('pages.enquiry.index')->middleware([EnquiryAccess::class]);
+Route::get('/enquiry/{work}/{user}', 'EnquiryController@show')->name('pages.enquiry.show')->middleware([EnquiryAccess::class]);
+
+
+Route::post('/enquiry/make', 'EnquiryController@create')->middleware("can:send enquiry");
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

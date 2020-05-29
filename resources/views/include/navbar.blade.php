@@ -21,6 +21,17 @@
 
                         @endrole
                     </li>
+                    @if(Gate::check('view self enquiry') || Gate::check('view all enquiry'))
+                        <li>
+                            <a href="{{ route('pages.enquiry.index') }}" class="nav-link">
+                                @role('customer')
+                                    My Enquiry
+                                @else
+                                    All Enquiry
+                                @endrole
+                            </a>
+                        </li>
+                    @endif
                 @endauth
                 <li class="nav-item">
                     <a href="#" class="nav-link">About</a>

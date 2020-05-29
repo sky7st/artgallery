@@ -69,11 +69,53 @@
           </div>
           <div class="row">
             @guest
-              <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE EQUIRY</a>   
+              <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE ENQUIRY</a>   
             @endguest
             @auth
               @can('buy works')
-              <a href="#" class="btn btn-primary btn-lg" id="make-equiry">MAKE EQUIRY</a> 
+              <a href="#" class="btn btn-primary btn-lg" id="make-enquiry" data-toggle="modal" data-target="#makeEnquiryModal">MAKE ENQUIRY</a> 
+              <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" id="makeEnquiry">
+                      <form id="enquiryForm">
+                        @csrf
+                        <input type="hidden" name="work" value="{{ $work->id }}">
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" value="{{ auth()->user()->name }}" class="enquiry-input form-control" id="name" placeholder="Name"  readonly="readonly"/>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
+                          </div>
+                        </div>
+                        <div class="form-row">                        
+                          <div class="form-group col">
+                            <input type="text" name="subject" class="enquiry-input form-control" id="subject" placeholder="Subject" required/>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" id="submitEnquiry" class="btn btn-primary mr-auto rounded-0">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               @endcan
             @endauth
           </div>
@@ -82,37 +124,41 @@
     @endcan
   </div>
 </div>
+
+<script>
+@can('buy works')
+  $('#submitEnquiry').click(function (event) {
+    var form = $("#enquiryForm")[0];
+    if(form.reportValidity()){
+      console.log($(form).serialize())
+      $.ajax({
+        method: "POST",
+        url: "/enquiry/make",
+        data: $(form).serialize(),
+        success: function (response) {
+          if(response.msg === "success"){
+            alert("Send Enquiry Success!!")
+            location.href = "/enquiry";
+          }
+        }
+      })
+    }
+  })
+@endcan
+</script>
+
 <style>
-  #summary {
-    font-size: 14px;
-    line-height: 1.5;
+
+  .modal-header {
+    border-bottom: 0 none;
   }
 
-  #summary p.collapse:not(.show) {
-      height: 20px !important;
-      overflow: hidden;
-    
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;  
+  .modal-footer {
+    border-top: 0 none;
   }
 
-  #summary p.collapsing {
-      min-height: 20px !important;
-  }
-
-  #summary a.collapsed:after  {
-      content: 'Read More';
-  }
-
-  #summary a:not(.collapsed):after {
-      content: 'Read Less';
-  }
-  .collapsed {
-    color: inherit;
-  }
-  .collapsed:hover {
-    color: inherit;
+  .enquiry-input{
+    border-radius:0px !important;
   }
 </style>
 @endsection

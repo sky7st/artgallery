@@ -42,6 +42,9 @@ class RolePermissionSeeder extends Seeder
         $permissionCustomerBuy = Permission::create([
             'name' => 'buy works'
         ]);
+        $permissionEnquiry = Permission::create([
+            'name' => 'send enquiry'
+        ]);
         $permissionOwnerUpdate = Permission::create([
             'name' => 'update owner data'
         ]);
@@ -51,6 +54,14 @@ class RolePermissionSeeder extends Seeder
         
         $permissionCanBeReg = Permission::create([
             'name' => 'can be registered'
+        ]);
+        
+        $permissionViewSelfEnquiry = Permission::create([
+            'name' => 'view self enquiry'
+        ]);
+        
+        $permissionViewAllEnquiry = Permission::create([
+            'name' => 'view all enquiry'
         ]);
 
         $roleAdmin->syncPermissions([
@@ -69,6 +80,8 @@ class RolePermissionSeeder extends Seeder
         $roleCustomer->syncPermissions([
             $permissionCustomerUpdate,
             $permissionCustomerBuy,
+            $permissionEnquiry,
+            $permissionViewSelfEnquiry,
             $permissionCanBeReg
         ]);
         $roleOwner->syncPermissions([
@@ -76,7 +89,9 @@ class RolePermissionSeeder extends Seeder
             // $permissionCanBeReg
         ]);
         $roleSaler->syncPermissions([
-            $permissionSalerUpdate
+            $permissionSalerUpdate,
+            $permissionViewAllEnquiry,
+            $permissionEnquiry
         ]);
 
     }

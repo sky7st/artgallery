@@ -31,4 +31,9 @@ class Work extends Model
     {
         return $this->hasOne('App\Artist','id', 'artist_id');
     }
+
+    public function enquirys()
+    {
+        return $this->hasMany('App\Enquiry', 'work_id', 'id');
+    }
 }
