@@ -49412,8 +49412,8 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Lin\Desktop\NTUST\COURSE\DataBase\Project\artgallery\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Lin\Desktop\NTUST\COURSE\DataBase\Project\artgallery\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\lin\Desktop\NTUST\COURSE\DB\artgallery\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\lin\Desktop\NTUST\COURSE\DB\artgallery\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
