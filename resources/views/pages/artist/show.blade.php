@@ -78,41 +78,41 @@
             </button>
           </div>
           <div class="modal-body">
-          <form id="updateArtistForm" method="POST" action="{{ route('pages.artist.update', $artist->id) }}">
+            <form id="updateArtistForm" method="POST" action="{{ route('pages.artist.update', $artist->id) }}">
               @csrf
               <div class="form-row">
-                  <div class="form-group col">
-                      <label for="ssn">SSN</label>
+                <div class="form-group col">
+                  <label for="ssn">SSN</label>
                   <input id="ssn" name="ssn" type="text" class="form-control" value="{{ $artist->artist_ssn }}" disabled>
-                  </div>
-                  <div class="form-group col">
-                      <label for="name">Name</label>
-                      <input id="name" name="name" type="text" class="form-control" value="{{ $artist->name }}" required>
-                  </div>
-                  <div class="form-group col">
-                      <label for="phone">Phone</label>
-                      <input id="phone" name="phone" type="text" class="form-control" value="{{ $artist->phone }}" required>
-                  </div>
+                </div>
+                <div class="form-group col">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" class="form-control" value="{{ $artist->name }}" required>
+                </div>
+                <div class="form-group col">
+                  <label for="phone">Phone</label>
+                  <input id="phone" name="phone" type="text" class="form-control" value="{{ $artist->phone }}" required>
+                </div>
               </div>
               <div class="form-row">
-                  <div class="form-group col">
-                    <label for="add">Address</label>
-                    <input id="add" name="add" type="text" class="form-control" value="{{ $artist->address }}" required>
-                  </div>
+                <div class="form-group col">
+                  <label for="add">Address</label>
+                  <input id="add" name="add" type="text" class="form-control" value="{{ $artist->address }}" required>
+                </div>
               </div>
               <div class="form-row">
-                  <div class="form-group col">
-                      <label for="umedium">Usual Medium</label>
-                      <input id="umedium" name="umedium" type="text" class="form-control" value="{{ $artist->usual_medium }}">
-                  </div>
-                  <div class="form-group col">
-                      <label for="ustyle">Usual Style</label>
-                      <input id="ustyle" name="ustyle" type="text" class="form-control" value="{{ $artist->usual_style }}">
-                  </div>
-                  <div class="form-group col">
-                      <label for="utype">Usual Type</label>
-                      <input id="utype" name="utype" type="text" class="form-control" value="{{ $artist->usual_type }}">
-                  </div>
+                <div class="form-group col">
+                  <label for="umedium">Usual Medium</label>
+                  <input id="umedium" name="umedium" type="text" class="form-control" value="{{ $artist->usual_medium }}">
+                </div>
+                <div class="form-group col">
+                  <label for="ustyle">Usual Style</label>
+                  <input id="ustyle" name="ustyle" type="text" class="form-control" value="{{ $artist->usual_style }}">
+                </div>
+                <div class="form-group col">
+                  <label for="utype">Usual Type</label>
+                  <input id="utype" name="utype" type="text" class="form-control" value="{{ $artist->usual_type }}">
+                </div>
               </div>
             </form>
           </div>
