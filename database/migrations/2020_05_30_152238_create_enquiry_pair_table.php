@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEnquiryTable extends Migration
+class CreateEnquiryPairTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateEnquiryTable extends Migration
      */
     public function up()
     {
-        Schema::create('enquiry', function (Blueprint $table) {
+        Schema::create('enquiry_pair', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('pair_id');
             $table->bigInteger('work_id');
-            $table->bigInteger('user_id');
-            $table->string('user_type');
-            $table->string('content');
+            $table->bigInteger('customer_id');
+            $table->bigInteger('saler_id')->nullable();
+            $table->bigInteger('now_price_id')->nullable();
             $table->timestamps();
+            $table->unique(['work_id', 'customer_id']);
         });
     }
 
@@ -31,6 +31,6 @@ class CreateEnquiryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enquiry');
+        Schema::dropIfExists('enquiry_pair');
     }
 }

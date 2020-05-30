@@ -20,12 +20,15 @@ class Work extends Model
         'image_thumb',
         'image_path',
         'asking_price',
+        'enquiry_pair_id',
         'date_of_show',
-        'date_sold'
+        'date_sold',
+        'state'
     ];
 
     protected $attributes = [
-        'asking_price' => 0
+        'asking_price' => 0,
+        'state' => 1
     ];
     public function artist()
     {
@@ -35,5 +38,9 @@ class Work extends Model
     public function enquirys()
     {
         return $this->hasMany('App\Enquiry', 'work_id', 'id');
+    }
+    public function enquiryPair()
+    {
+        return $this->hasMany('App\EnquiryPair', 'work_id', 'id');
     }
 }

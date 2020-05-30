@@ -66,16 +66,82 @@
     </div>
   </div>
   <div class="enquirys col-6">
+    <div class="operation row">
+      <div class="col">
+        <a href="#" class="btn btn-primary btn-lg" id="make-enquiry" data-toggle="modal" data-target="#makeEnquiryModal">
+        @role('customer')  
+          MAKE ENQUIRY
+        @else
+          SEND REPLY
+        @endrole
+        </a> 
+        <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-0">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="makeEnquiry">
+                <form id="enquiryForm">
+                  @csrf
+                  <input type="hidden" name="work" value="{{ $work->id }}">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label for="name">Name</label>
+                      <input type="text" name="name" value="{{ auth()->user()->name }}" class="enquiry-input form-control" id="name" placeholder="Name"  readonly="readonly"/>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label for="email">Email</label>
+                      <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
+                    </div>
+                  </div>
+                  {{-- <div class="form-row">                        
+                    <div class="form-group col">
+                      <input type="text" name="subject" class="enquiry-input form-control" id="subject" placeholder="Subject" required/>
+                    </div>
+                  </div> --}}
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="submitEnquiry" class="btn btn-primary mr-auto rounded-0">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="my-3 p-3 bg-white rounded box-shadow">
-      <h6 class="border-bottom border-gray pb-2 mb-0">Your Enquiry Records</h6>
-      @foreach ($work->enquirys as $enquiry)
+      <h4 class="border-bottom border-gray pb-2 mb-0">Your Enquiry Records</h4>
+      @foreach ($enquirys as $enquiry)
         <div class="media text-muted pt-3">
-          <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray ">
-            <span class="d-block">
+          <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray
+            @role('customer') @if ($enquiry->user_type === "customer") text-right @endif @endrole
+            @role('saler') @if ($enquiry->user_type === "saler") text-right @endif @endrole">
+            <span class="d-block ">
               @if ($enquiry->user_type === "customer")
-                <strong class="text-gray-dark">You</strong>
+                @role('customer')
+                  <strong class="text-gray-dark">You</strong>
+                @else
+                  <strong class="text-gray-dark">{{$enquiry->user->name}}</strong>
+                @endrole
+              @else
+                @role('customer')
+                  <strong class="text-gray-dark">Saler:{{$enquiry->user->name}}</strong>
+                @else
+                  <strong class="text-gray-dark">You</strong>
+                @endrole
               @endif
-              <span class="small">{{ $enquiry->created_at->format('Y-m-d H:i')}}</span>
+                <span class="small">{{ $enquiry->created_at->format('Y-m-d H:i')}} says:</span>
+
             </span> 
             {{ $enquiry->content}}
           </p>
@@ -84,4 +150,23 @@
     </div>
   </div>
 </div>
+<script>
+  $('#submitEnquiry').click(function (event) {
+    var form = $("#enquiryForm")[0];
+    if(form.reportValidity()){
+      console.log($(form).serialize())
+      $.ajax({
+        method: "POST",
+        url: "{{"/enquiry/".$work->id."/".$user_id."/make"}}",
+        data: $(form).serialize(),
+        success: function (response) {
+          if(response.msg === "success"){
+            alert("Send Enquiry Success!!")
+            location.reload();
+          }
+        }
+      })
+    }
+  })
+</script>
 @endsection

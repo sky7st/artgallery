@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEnquiryTable extends Migration
+class CreateSalerPriceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateEnquiryTable extends Migration
      */
     public function up()
     {
-        Schema::create('enquiry', function (Blueprint $table) {
+        Schema::create('saler_price', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('pair_id');
-            $table->bigInteger('work_id');
-            $table->bigInteger('user_id');
-            $table->string('user_type');
-            $table->string('content');
+            $table->integer('price');
+            $table->boolean('confirmed')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateEnquiryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('enquiry');
+        Schema::dropIfExists('saler_price');
     }
 }

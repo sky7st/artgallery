@@ -29,7 +29,7 @@ Route::get('/enquiry', 'EnquiryController@index')->name('pages.enquiry.index')->
 Route::get('/enquiry/{work}/{user}', 'EnquiryController@show')->name('pages.enquiry.show')->middleware([EnquiryAccess::class]);
 
 
-Route::post('/enquiry/make', 'EnquiryController@create')->middleware("can:send enquiry");
+Route::post('/enquiry/{work}/{user}/make', 'EnquiryController@create')->middleware("can:send enquiry");
 
 Auth::routes();
 

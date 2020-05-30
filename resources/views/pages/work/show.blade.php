@@ -86,6 +86,9 @@
                       <form id="enquiryForm">
                         @csrf
                         <input type="hidden" name="work" value="{{ $work->id }}">
+                        @role('customer')
+                          <input type="hidden" name="user" value="{{ $user_id }}">
+                        @endrole
                         <div class="form-row">
                           <div class="form-group col">
                             <label for="name">Name</label>
@@ -98,11 +101,11 @@
                             <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
                           </div>
                         </div>
-                        <div class="form-row">                        
+                        {{-- <div class="form-row">                        
                           <div class="form-group col">
                             <input type="text" name="subject" class="enquiry-input form-control" id="subject" placeholder="Subject" required/>
                           </div>
-                        </div>
+                        </div> --}}
                         <div class="form-row">
                           <div class="form-group col">
                             <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
@@ -133,7 +136,7 @@
       console.log($(form).serialize())
       $.ajax({
         method: "POST",
-        url: "/enquiry/make",
+        url: "/enquiry/" + "{{ $work->id }}" + "/" + "{{ auth()->user()->id }}" +  "/make",
         data: $(form).serialize(),
         success: function (response) {
           if(response.msg === "success"){

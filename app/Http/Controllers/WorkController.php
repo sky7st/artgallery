@@ -108,6 +108,7 @@ class WorkController extends Controller
     public function show($id)
     {
         $work = Work::where('id', $id);
+        $user_id = Auth::user()->id;
         if($work->exists()){
             // $work = $work->with([
             //     'artist' => function ($query) {
@@ -117,9 +118,13 @@ class WorkController extends Controller
             //         $query->select('id');
             //     }])->get();
             $work->first()->artist;
-            return view('pages.work.show',[
+            $returnVal = [
                 'work' => $work->first()
-            ]);
+            ];
+            if(Auth::user()->roles->first()->name === "customer"){
+                $returnVal["user_id"] = $user_id;
+            }
+            return view('pages.work.show', $returnVal);
         }else{
             abort(404);
         }

@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Customer;
 use App\User;
+use App\Enquiry;
 class CustomerSeeder extends Seeder
 {
     /**
@@ -27,7 +28,18 @@ class CustomerSeeder extends Seeder
             $user->password = Hash::make('password');
             $user->assignRole('customer');
             $user->save();
-            
+
+            // for($j = 1;$j <= 3; $j++){
+            //     for($k = 1;$k <= 3; $k++){
+            //         $enquiry = new Enquiry;
+            //         $enquiry->work_id = $k;
+            //         $enquiry->user_id = $user->id;
+            //         $enquiry->user_type = "customer";
+            //         $enquiry->subject = "work".$k." customer".$i." time:".$j;
+            //         $enquiry->content = "work".$k." customer".$i." content: ".$j;
+            //         $enquiry->save();
+            //     }
+            // }
         }
     }
 }

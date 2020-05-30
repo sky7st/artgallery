@@ -25,4 +25,8 @@ class Enquiry extends Model
     {
         return $this->hasOne('App\Work', 'id', 'work_id');
     }
+    public function pair()
+    {
+        return $this->hasOne('App\EnquiryPair', 'id', 'pair_id');
+    }
 }
