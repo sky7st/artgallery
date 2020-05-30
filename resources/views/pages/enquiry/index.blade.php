@@ -5,10 +5,12 @@
   <h2>Your Enquiries</h2>
 </div>
 <div class="enquiry-list">
+
   @if($enquirys->isEmpty())
     <span>You have no enquiry.</span>
   @else
     @foreach ($enquirys as $enquiry)
+    {{-- {{ $enquiry }} --}}
     <table class="table mt-4">
       <thead class="thead-dark">
         <tr>
@@ -17,6 +19,7 @@
           <th scope="col">Artist Asking Price</th>
           {{-- <th scope="col">Last Enquiry Subject</th> --}}
           <th scope="col">Last Enquiry Time</th>
+          <th scope="col">Last Saler Reply Time</th>
           <th scope="col">View Detail</th>
         </tr>
       </thead>
@@ -26,8 +29,15 @@
           <td>{{ $enquiry->work->artist->name}}</td>
           <td>${{ $enquiry->work->asking_price}}</td>
           {{-- <td>{{ $enquiry->subject }}</td> --}}
-          <td>{{ $enquiry->created_at->format('Y-m-d H:i') }}</td>
-        <td><button class="viewEnquiryBtn btn btn-primary" data-work="{{ $enquiry->work->id }}" data-user="{{  $enquiry->user_id }}">View</button></td>
+          <td>{{ date_format(date_create($enquiry->cust_last_time), 'Y-m-d H:i') }}</td>
+          <td>
+            @if(is_null($enquiry->saler_last_time))
+              Not replyed
+            @else
+              {{ date_format(date_create($enquiry->saler_last_time), 'Y-m-d H:i') }}
+            @endif
+          </td>
+        <td><button class="viewEnquiryBtn btn btn-primary" data-work="{{ $enquiry->work->id }}" data-user="{{  $enquiry->customer_id }}">View</button></td>
         </tr>
       </tbody>
     </table>

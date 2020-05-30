@@ -11,7 +11,10 @@ class EnquiryPair extends Model
     protected $fillable = [
         'work_id',
         'customer_id',
-        'saler_id'
+        'saler_id',
+        'now_price_id',
+        'cust_last_time',
+        'saler_last_time'
     ];
     public function work()
     {

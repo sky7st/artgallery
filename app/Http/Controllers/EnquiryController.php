@@ -23,15 +23,16 @@ class EnquiryController extends Controller
         $user = Auth::user();
         $role = $user->roles->first()->name;
         if($role === "customer"){
-            $enquiry_ids = Enquiry::select(DB::raw('max(id) as id'))
-                ->where('user_id', $user->id)
-                ->groupBy('work_id')->get();
-            $enquirys = Enquiry::whereIn('id', $enquiry_ids)->orderBy('created_at', 'DESC')->get();
-            foreach($enquirys as $enquiry){
-                $enquiry->work->artist;
-            }
+            $enquiry_works = EnquiryPair::where('customer_id', $user->id)->get();
+            // $enquiry_ids = Enquiry::select(DB::raw('max(id) as id'))
+            //     ->where('user_id', $user->id)
+            //     ->groupBy('work_id')->get();
+            // $enquirys = Enquiry::whereIn('id', $enquiry_ids)->orderBy('created_at', 'DESC')->get();
+            // foreach($enquirys as $enquiry){
+            //     $enquiry->work->artist;
+            // }
             return view("pages.enquiry.index",[
-                'enquirys' => $enquirys
+                'enquirys' => $enquiry_works
             ]);
         }else{
             $unsold_works = Work::where('state', 1)->with([
@@ -86,20 +87,26 @@ class EnquiryController extends Controller
             $pair = EnquiryPair::where([
                 'work_id' => $work,
                 'customer_id' => $user
-            ])->first;
+            ])->first();
             if(is_null($pair->saler_id)){
                 $pair->saler_id = $request->user()->id;
                 $pair->save();
             }
         }
         // error_log($pair);
-        $pair->enquirys()->create([
+        $data = [
             'pair_id' => $pair->id,
             'work_id' => $work,
             'user_id' => $request->user()->id,
             'user_type' => $role,
             'content' => $request->input('query')
-        ]);   
+        ];
+        if($role === "customer")
+            $pair->cust_last_time = now();
+        else
+            $pair->saler_last_time = now();
+        $pair->save();
+        $pair->enquirys()->create($data);   
         return response()->json([
             'msg' => 'success',
             'data' => ''

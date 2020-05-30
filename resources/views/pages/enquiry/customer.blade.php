@@ -62,6 +62,17 @@
             <a class="collapsed" data-toggle="collapse" href="#collapseSummary" aria-expanded="false" aria-controls="collapseSummary"></a>
           </div>
         </div>
+        <div class="work-state row mt-4 text-center">
+          @if($work->state === 1)
+            <div class="col bg-success">
+              <span><h1 class="text-white mt-2">UNSOLD</h1></span>
+            </div>
+          @else
+            <div class="col bg-danger">
+              <span><h3 class="text-white">SOLD</h3></span>
+            </div>
+          @endif
+        </div>
       </div>
     </div>
   </div>
@@ -75,6 +86,9 @@
           SEND REPLY
         @endrole
         </a> 
+        @role('saler')
+          <a href="#" class="btn btn-success btn-lg ml-2">SEND TRADE</a>
+        @endrole
         <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-0">
