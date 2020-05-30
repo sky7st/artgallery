@@ -5,6 +5,9 @@
   <h2>Your Enquiries</h2>
 </div>
 <div class="enquiry-list">
+  @if($enquirys->isEmpty())
+    <span>You have no enquiry.</span>
+  @else
     @foreach ($enquirys as $enquiry)
     <table class="table mt-4">
       <thead class="thead-dark">
@@ -30,6 +33,7 @@
     </table>
     {{-- {{ $enquiry }} --}}
     @endforeach
+  @endif 
 </div>  
 <script>
   $(document).ready(function () {
