@@ -80,7 +80,6 @@ class EnquiryController extends Controller
                 $pair->work_id = $work;
                 $pair->customer_id = $user;
                 $pair->save();
-                error_log("not exists");
             }else{
                 $pair = $pair->first();
             }
@@ -102,12 +101,15 @@ class EnquiryController extends Controller
             'user_type' => $role,
             'content' => $request->input('query')
         ];
-        if($role === "customer")
-            $pair->cust_last_time = now();
-        else
-            $pair->saler_last_time = now();
+        $pair->enquirys()->create($data);  
+        $now_time = now();
+        if($role === "customer"){
+            $pair->cust_last_time = $now_time;
+        }
+        else{
+            $pair->saler_last_time = $now_time;
+        }
         $pair->save();
-        $pair->enquirys()->create($data);   
         return response()->json([
             'msg' => 'success',
             'data' => ''

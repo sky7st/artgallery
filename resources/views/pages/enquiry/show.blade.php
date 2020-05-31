@@ -68,13 +68,19 @@
         </div>
         <div class="work-state row mt-4 text-center">
           @if($work->state === 1)
-            <div class="col bg-success">
+            <div class="col bg-danger">
               <span><h1 class="text-white mt-2">UNSOLD</h1></span>
             </div>
           @else
-            <div class="col bg-danger">
-              <span><h3 class="text-white">SOLD</h3></span>
-            </div>
+            @if ($work->soldTrade->enquiry_pair->customer_id == auth()->user()->id)
+              <div class="col bg-success">
+                <span><h3 class="text-white mt-2">BOUGHT</h3></span>
+              </div>
+            @else
+              <div class="col bg-danger">
+                <span><h3 class="text-white mt-2">SOLD</h3></span>
+              </div> 
+            @endif
           @endif
         </div>
       </div>
@@ -91,7 +97,10 @@
         @endrole
         </a> 
         @role('saler')
-          @if(is_null($enquiryPair->trade))
+          @if ($work->state === 2)
+            <button class="btn btn-danger btn-lg ml-2">IS SOLD</button>
+          @else
+            @if(is_null($enquiryPair->trade))
             <button class="btn btn-success btn-lg ml-2" id="send-trade" data-toggle="modal" data-target="#sendTradeModal">SEND TRADE</button>
             <div id="sendTradeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="sendTradeModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-sm">
@@ -115,12 +124,17 @@
                 </div>
               </div>
             </div>
-          @else
-            @if (is_null($enquiryPair->trade->cust_confirmed))
-              <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR CUSTOMER'S COMFIRM</button>
             @else
-              <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR ARTIST'S COMFIRM</button>
-            @endif
+              @if (is_null($enquiryPair->trade->cust_confirmed))
+                <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR CUSTOMER'S COMFIRM</button>
+              @else
+                @if(!$enquiryPair->trade->artist_confirmed)
+                  <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR ARTIST'S COMFIRM</button>
+                @else
+                  <button class="btn btn-success btn-lg ml-2" disabled>TRADE SUCCESS</button>
+                @endif
+              @endif
+            @endif 
           @endif
         @endrole
         @role('customer')

@@ -20,6 +20,7 @@
           {{-- <th scope="col">Last Enquiry Subject</th> --}}
           <th scope="col">Last Enquiry Time</th>
           <th scope="col">Last Saler Reply Time</th>
+          <th scope="col">Work Status</th>
           <th scope="col">View Detail</th>
         </tr>
       </thead>
@@ -37,6 +38,18 @@
               {{ date_format(date_create($enquiry->saler_last_time), 'Y-m-d H:i') }}
             @endif
           </td>
+          <td>
+            @if($enquiry->work->state === 2)
+              @if ($enquiry->work->soldTrade->enquiry_pair->customer_id == $enquiry->customer_id)
+                <b><span class="text-success">BOUGHT</span></b>
+              @else
+              <b><span class="text-danger">IS BOUGHT BY OTHER</span></b>
+              @endif
+            @else
+            <b><span class="text-danger">UNSOLD</span></b>
+            @endif
+          </td>
+
         <td><button class="viewEnquiryBtn btn btn-primary" data-work="{{ $enquiry->work->id }}" data-user="{{  $enquiry->customer_id }}">View</button></td>
         </tr>
       </tbody>

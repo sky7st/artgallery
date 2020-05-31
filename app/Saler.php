@@ -11,7 +11,8 @@ class Saler extends Model
 
     protected $fillable = [
         'name',
-        'phone'
+        'phone',
+        'total_sale'
     ];
 
     protected $attributes = [

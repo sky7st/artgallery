@@ -145,8 +145,52 @@ class TradeController extends Controller
                     'content' => $confirm ? "Hi, I'd confirmed the trade!" : "Hi, I'd rejected the trade!"
                 ];
                 $pair->enquirys()->create($dataEnquiry);
+                $pair->cust_last_time = now();
+                $pair->save();
                 // error_log($pair->trade);
             }
+        }else if($role === "artist"){
+            if($request->user()->id !== $pair->work->artist->user_id){
+                abort(404);
+            }else{
+                $confirm = $request->input('confirm') === "1" ? true : false;
+
+                $pair->trade->artist_confirmed = $confirm;
+                $pair->trade->artist_confirmed_at = now();
+                $pair->trade->save();
+                if(!$confirm){
+                    $pair->trade_id = null;
+                    $pair->save();
+                }else{
+                    $dataEnquiry = [
+                        'pair_id' => $pair->id,
+                        'work_id' => $pair->work_id,
+                        'user_id' => $pair->saler_id,
+                        'user_type' => "saler",
+                        'content' => $confirm ? "Hi, the artist confirmed the trade!The trade is success!!" : "Hi, the artist rejected the trade!"
+                    ];
+                    $pair->enquirys()->create($dataEnquiry);
+                    $pair->saler_last_time = now();
+                    $pair->save();
+
+                    $pair->work->trade_id = $pair->trade->id;
+                    $pair->work->state = 2;
+                    $pair->work->save();
+
+                    $price = $pair->trade->price;
+                    $pair->saler->total_sale = $pair->saler->total_sale + $price;
+                    $pair->saler->save();
+
+                    $pair->customer->amt_bought_year_to_date = $pair->customer->amt_bought_year_to_date + $price;
+                    $pair->customer->save();
+
+                    $pair->work->artist->sales_year_to_date = $pair->work->artist->sales_year_to_date + $price;
+                    $pair->work->artist->save();
+                }
+            }
+            // error_log($pair->work->artist->user_id);
+        }else{
+            abort(403);
         }
         return response()->json([
             'msg' => 'success',

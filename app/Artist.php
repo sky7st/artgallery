@@ -16,7 +16,9 @@ class Artist extends Model
         'phone',
         'usual_type',
         'usual_medium',
-        'usual_style'
+        'usual_style',
+        'sales_last_year',
+        'sales_year_to_date'
     ];
 
     protected $attributes = [

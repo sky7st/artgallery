@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class EnquiryPair extends Model
 {
     protected $table = 'enquiry_pair';
-    protected $timestamp = true;
     protected $fillable = [
         'work_id',
         'customer_id',
@@ -22,11 +21,11 @@ class EnquiryPair extends Model
     }
     public function customer()
     {
-        return $this->hasOne('App\User', 'id', 'customer_id');
+        return $this->hasOne('App\Customer', 'user_id', 'customer_id');
     }
     public function saler()
     {
-        return $this->hasOne('App\User', 'id', 'saler_id');
+        return $this->hasOne('App\Saler', 'user_id', 'saler_id');
     }
     public function enquirys()
     {

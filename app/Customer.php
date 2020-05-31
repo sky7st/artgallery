@@ -13,7 +13,9 @@ class Customer extends Model
         'user_id',
         'name',
         'address',
-        'phone'
+        'phone',
+        'amt_bought_last_year',
+        'amt_bought_year_to_date'
     ];
 
     protected $attributes = [

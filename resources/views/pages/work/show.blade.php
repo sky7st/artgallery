@@ -132,73 +132,83 @@
 </div>
 @role('artist')
 @can('isHimSelf', $work->artist->user, Auth::user())
-@php
-    $trades = $work->enquiryPair()->with(['trade'])->get();
-@endphp
-<div class="trade-title mt-2">
-  <h2>All Trade Request For This Work</h2>
-</div>
-<div class="trade-list">
-  {{-- {{ $trades }} --}}
-  @if ($trades->isEmpty())
-    <span>You have no trade request.</span> 
-  @else
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Customer Name</th>
-        <th scope="col">Saler Name</th>
-        <th scope="col">Your Price</th>
-        <th scope="col">Request Price</th>
-        <th scope="col">Amount will receive</th>
-        <th scope="col">Request Time</th>
-        <th scope="col">Confirm/Reject</th>
-      </tr>
-    </thead>
-      @foreach ($trades as $trade)
-      {{$trade}}
-      <tr>
-        @if(!is_null($trade->trade))
-          <td>{{ $trade->customer->name }}</td>
-          <td>{{ $trade->saler->name }}</td>
-          <td>${{ $work->asking_price }}</td>
-          <td>${{ $trade->trade->price }}</td>
-          <td>${{ $trade->trade->price*0.9 }}</td>
-          <td>{{ date_format(date_create($trade->trade->cust_confirmed_at), 'Y-m-d H:i') }}</td>
-          <td><button class="confirmTradeBtn btn btn-primary" data-toggle="modal" data-target="#confirmTradeModal"
-             data-pair="{{ $trade->trade->enquiry_pair_id }}">Confirm/Reject</button></td>
-        @endif
-      </tr>
-      @endforeach
-  </table>
-  <div id="confirmTradeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmTradeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content rounded-0">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="makeConfirm">
-          <div id="confirm-text">
-            <span>Do you sure you want to ACCEPT/REJECT the trade?<span><br>
-            <span class="text-danger">*Trade will be done once you send ACCEPT!</span>
-          </div>
-          <form id="confirmTradeForm">
-            @csrf
-            <input type="hidden" name="pair" value="-1" id="pairIdInput"/>
-            <input type="hidden" name="confirm" value="-1" id="confirmInput"/>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="confirmBtn btn btn-success rounded-0" data-confirm="1">Accept</button>
-          <button type="button" class="confirmBtn btn btn-danger rounded-0" data-confirm="2">Reject</button>
-        </div>
-      </div>
+  @php
+      $trades = $work->enquiryPair()->with(['trade' => function($query){
+        $query->whereNotNull('cust_confirmed');
+      }])->get();
+      $trades = $trades->filter(function($trade){
+        return !is_null($trade->trade);
+      });
+  @endphp
+  @if($work->state === 1)
+    <div class="trade-title mt-2">
+      <h2>All Trade Request For This Work</h2>
     </div>
+    <div class="trade-list">
+      {{-- {{ $trades }} --}}
+      @if ($trades->isEmpty())
+        <span>You have no trade request.</span> 
+      @else
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Customer Name</th>
+              <th scope="col">Saler Name</th>
+              <th scope="col">Your Price</th>
+              <th scope="col">Request Price</th>
+              <th scope="col">Amount will receive</th>
+              <th scope="col">Request Time</th>
+              <th scope="col">Confirm/Reject</th>
+            </tr>
+          </thead>
+            @foreach ($trades as $trade)
+            <tr>
+              @if(!is_null($trade->trade) && !is_null($trade->trade->cust_confirmed))
+                <td>{{ $trade->customer->name }}</td>
+                <td>{{ $trade->saler->name }}</td>
+                <td>${{ $work->asking_price }}</td>
+                <td>${{ $trade->trade->price }}</td>
+                <td>${{ $trade->trade->price*0.9 }}</td>
+                <td>{{ date_format(date_create($trade->trade->cust_confirmed_at), 'Y-m-d H:i') }}</td>
+                <td><button class="confirmTradeBtn btn btn-primary" data-toggle="modal" data-target="#confirmTradeModal"
+                  data-pair="{{ $trade->trade->enquiry_pair_id }}">Confirm/Reject</button></td>
+              @endif
+            </tr>
+            @endforeach
+        </table>
+        <div id="confirmTradeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmTradeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content rounded-0">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="makeConfirm">
+                <div id="confirm-text">
+                  <span>Do you sure you want to ACCEPT/REJECT the trade?<span><br>
+                  <span class="text-danger">*Trade will be done once you send ACCEPT!</span>
+                </div>
+                <form id="confirmTradeForm">
+                  @csrf
+                  <input type="hidden" name="pair" value="-1" id="pairIdInput"/>
+                  <input type="hidden" name="confirm" value="-1" id="confirmInput"/>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="confirmBtn btn btn-success rounded-0" data-confirm="1">Accept</button>
+                <button type="button" class="confirmBtn btn btn-danger rounded-0" data-confirm="2">Reject</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
+    </div>
+  @else
+  <div class="trade-title mt-2">
+    <h2 class="text-success">This work is sold!!</h2>
   </div>
   @endif
-</div>
 @endcan
 @endrole
 <script>
@@ -238,7 +248,7 @@
         data: $(form).serialize(),
         success: function (response) {
           console.log(response)
-          // location.reload()
+          location.reload()
         }
       })
     })
