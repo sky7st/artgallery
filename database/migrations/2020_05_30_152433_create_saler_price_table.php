@@ -13,10 +13,14 @@ class CreateSalerPriceTable extends Migration
      */
     public function up()
     {
-        Schema::create('saler_price', function (Blueprint $table) {
+        Schema::create('trade', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('enquiry_pair_id');
             $table->integer('price');
-            $table->boolean('confirmed')->nullable();
+            $table->boolean('cust_confirmed')->nullable();
+            $table->timestamp('cust_confirmed_at')->nullable();
+            $table->boolean('artist_confirmed')->nullable();
+            $table->timestamp('artist_confirmed_at')->nullable();
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@ class EnquiryPair extends Model
         'work_id',
         'customer_id',
         'saler_id',
-        'now_price_id',
+        'trade_id',
         'cust_last_time',
         'saler_last_time'
     ];
@@ -31,5 +31,9 @@ class EnquiryPair extends Model
     public function enquirys()
     {
         return $this->hasMany('App\Enquiry', 'pair_id', 'id');
+    }
+    public function trade()
+    {
+        return $this->belongsTo('App\Trade');
     }
 }

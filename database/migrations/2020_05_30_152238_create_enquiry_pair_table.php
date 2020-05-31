@@ -18,7 +18,7 @@ class CreateEnquiryPairTable extends Migration
             $table->bigInteger('work_id');
             $table->bigInteger('customer_id');
             $table->bigInteger('saler_id')->nullable();
-            $table->bigInteger('now_price_id')->nullable();
+            $table->bigInteger('trade_id')->nullable();
             $table->timestamp("cust_last_time");
             $table->timestamp("saler_last_time")->nullable();
             $table->timestamps();

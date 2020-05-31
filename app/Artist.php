@@ -28,4 +28,8 @@ class Artist extends Model
     {
         return $this->hasOne('App\User','email', 'artist_email');
     }
+    public function work()
+    {
+        return $this->hasMany('App\Work', 'id', 'artist_id');
+    }
 }

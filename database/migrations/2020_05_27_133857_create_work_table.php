@@ -25,9 +25,8 @@ class CreateWorkTable extends Migration
             $table->string('image_thumb')->nullable();
             $table->string('image_path')->nullable();
             $table->string('asking_price');
-            $table->bigInteger('enquiry_pair_id')->nullable();
+            $table->bigInteger('trade_id')->nullable();
             $table->date('date_of_show')->nullable();
-            $table->date('date_sold')->nullable();
             $table->integer('state')->default(1);
             $table->timestamps();
             

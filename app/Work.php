@@ -43,4 +43,13 @@ class Work extends Model
     {
         return $this->hasMany('App\EnquiryPair', 'work_id', 'id');
     }
+
+    public function soldTrade()
+    {
+        return $this->hasOne('App\Trade', 'id', 'trade_id');
+    }
+    public function trades()
+    {
+        return $this->hasMany('App\Trade', 'work_id', 'id');
+    }
 }

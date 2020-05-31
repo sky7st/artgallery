@@ -27,10 +27,10 @@ Route::get('/work/{id}/delete', "WorkController@destroy")->middleware("can:delet
 
 Route::get('/enquiry', 'EnquiryController@index')->name('pages.enquiry.index')->middleware([EnquiryAccess::class]);
 Route::get('/enquiry/{work}/{user}', 'EnquiryController@show')->name('pages.enquiry.show')->middleware([EnquiryAccess::class]);
-
-
 Route::post('/enquiry/{work}/{user}/make', 'EnquiryController@create')->middleware("can:send enquiry");
 
+Route::post('/trade/make', 'TradeController@create')->middleware("can:make trade");
+Route::post('/trade/confirm', 'TradeController@edit')->middleware("can:confirm trade");
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

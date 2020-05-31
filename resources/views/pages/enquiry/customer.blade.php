@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+@php
+  $work = $enquiryPair->work->first();
+  $enquirys = $enquiryPair->enquirys;
+@endphp
 <div class="row pt-2">
   <div class="work-descript col-5 pr-md-0 pr-lg-0">
     <div class="work-image col-12 col-sm-12 col-md-7 col-lg-8">
@@ -87,7 +91,76 @@
         @endrole
         </a> 
         @role('saler')
-          <a href="#" class="btn btn-success btn-lg ml-2">SEND TRADE</a>
+          @if(is_null($enquiryPair->trade))
+            <button class="btn btn-success btn-lg ml-2" id="send-trade" data-toggle="modal" data-target="#sendTradeModal">SEND TRADE</button>
+            <div id="sendTradeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="sendTradeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content rounded-0">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body" id="makeTrade">
+                    <form method="post" id="tradeForm">
+                      @csrf
+                    <input type="hidden" name="pair_id" value="{{$enquiryPair->id}}">
+                      <label for="price">PRICE</label>
+                      <input type="number" name="price" value="" class="form-control col-6" required/>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="submitTrade" class="btn btn-primary mr-auto rounded-0">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @else
+            @if (is_null($enquiryPair->trade->cust_confirmed))
+              <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR CUSTOMER'S COMFIRM</button>
+            @else
+              <button class="btn btn-secondary btn-lg ml-2" disabled>WAITING FOR ARTIST'S COMFIRM</button>
+            @endif
+          @endif
+        @endrole
+        @role('customer')
+          @if(!is_null($enquiryPair->trade) && $work->state === 1)
+            @if(is_null($enquiryPair->trade->cust_confirmed))
+              <button class="confirmTrade btn btn-success btn-lg ml-2" data-toggle="modal" data-target="#confirmTadeModal" data-confirm="1" data-pair="{{$enquiryPair->id}}">ACCEPT TRADE</button>
+              <button class="confirmTrade btn btn-danger btn-lg ml-2" data-toggle="modal" data-target="#confirmTadeModal" data-confirm="2" data-pair="{{$enquiryPair->id}}">REJECT TRADE</button>
+              <div id="confirmTadeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmTadeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" id="makeConfirm">
+                      <div id="confirm-text">
+
+                      </div>
+                      <form id="confirmTradeForm">
+                        @csrf
+                        <input type="hidden" name="pair" value="-1" id="tradeInputPair"/>
+                        <input type="hidden" name="confirm" value="-1" id="tradeInputConfirm">
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" id="submitTrade" class="btn btn-success rounded-0">Accept</button>
+                      <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              @else
+              @if($enquiryPair->trade->cust_confirmed === 1)
+                <button class="btn btn-secondary btn-lg ml-2" disabled>TRADE ACCEPTED</button>
+              @else
+                <button class="btn btn-secondary btn-lg ml-2" disabled>TRADE REJECTED</button>
+              @endif
+            @endif
+          @endif
         @endrole
         <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
@@ -113,11 +186,6 @@
                       <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
                     </div>
                   </div>
-                  {{-- <div class="form-row">                        
-                    <div class="form-group col">
-                      <input type="text" name="subject" class="enquiry-input form-control" id="subject" placeholder="Subject" required/>
-                    </div>
-                  </div> --}}
                   <div class="form-row">
                     <div class="form-group col">
                       <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
@@ -182,5 +250,67 @@
       })
     }
   })
+  @role('saler')
+    $('#submitTrade').click(function (e) {
+      var form = $('#tradeForm')[0];
+      if(form.reportValidity()){
+      console.log($(form).serialize())
+      $.ajax({
+        method: "POST",
+        url: "/trade/make",
+        data: $(form).serialize(),
+        success: function (response) {
+          console.log(response)
+          if(response.msg === "success"){
+
+            alert("Send Trade Success!!")
+            location.reload();
+          }
+        }
+      })
+    }
+  })
+  @endrole
+  @role('customer')
+    $('#confirmTadeModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) 
+      var confirm = button.data('confirm') 
+      var pair_id = button.data('pair')
+      var modal = $(this)
+      var check = confirm === 1 ? "ACCEPT" : "REJECT"
+      var html = "Do you sure you want to <b>" + check + "</b> the trade?"
+      $('#tradeInputPair').val(pair_id)
+      $('#tradeInputConfirm').val(confirm)
+      modal.find('#confirm-text').html(html)
+      if(confirm === 1){
+        $('#submitTrade').attr('class', 'btn btn-success rounded-0')
+        $('#submitTrade').text('Accept')
+      }else{
+        $('#submitTrade').attr('class', 'btn btn-danger rounded-0')
+        $('#submitTrade').text('Reject')
+      }
+    })
+    $('#submitTrade').click(function (e) {
+      var form = $('#confirmTradeForm')[0]
+      $.ajax({
+        method: "POST",
+        url: "/trade/confirm",
+        data: $(form).serialize(),
+        success: function (response) {
+          console.log(response)
+          location.reload()
+        }
+      })
+    })
+  @endrole
 </script>
+<style>
+  .modal-header {
+    border-bottom: 0 none;
+  }
+
+  .modal-footer {
+    border-top: 0 none;
+  }
+</style>
 @endsection

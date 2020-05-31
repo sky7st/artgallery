@@ -29,7 +29,7 @@ class WorkSeeder extends Seeder
             Storage::disk('public')->put('images/arts/thumb/'.$filethumb, $thumbnail, 'public');
 
             $work = new Work;
-            $work->title = "Me Sucks".$i;
+            $work->title = "Me Suck".$i;
             $work->artist_id = 1;
             $work->type = "painting";
             $work->medium = "mix";

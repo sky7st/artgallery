@@ -150,9 +150,10 @@ class EnquiryController extends Controller
             // $work = Work::where('id', $work)->first();
             // $enquirys = $work->enquirys->where("user_id", '=', $user->id);
             return view("pages.enquiry.customer",[
-                "work" => $enquiryPair->work->first(),
+                // "work" => $enquiryPair->work->first(),
                 "user_id" => $id,
-                "enquirys" => $enquirys
+                // "enquirys" => $enquirys
+                "enquiryPair" => $enquiryPair
             ]);
         }else{
             // $work = Work::where('id', $work)->first();
@@ -160,9 +161,10 @@ class EnquiryController extends Controller
             $enquirys = $enquiryPair->enquirys;
 
             return view("pages.enquiry.customer",[
-                "work" => $enquiryPair->work->first(),
+                // "work" => $enquiryPair->work->first(),
                 "user_id" => $id,
-                "enquirys" => $enquirys
+                // "enquirys" => $enquirys
+                "enquiryPair" => $enquiryPair
             ]);
             // return view("pages.enquiry.customer");
         }
