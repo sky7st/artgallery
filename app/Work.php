@@ -48,8 +48,4 @@ class Work extends Model
     {
         return $this->hasOne('App\Trade', 'id', 'trade_id');
     }
-    public function trades()
-    {
-        return $this->hasMany('App\Trade', 'work_id', 'id');
-    }
 }

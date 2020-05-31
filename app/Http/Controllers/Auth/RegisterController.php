@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Artist;
+use App\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -74,10 +76,7 @@ class RegisterController extends Controller
             'ssn' => [
                 'required', 
                 'string', 
-                'unique:artist,artist_ssn',
-                'unique:customer,customer_ssn',
-                'unique:saler,saler_ssn',
-                'unique:admin,admin_ssn',
+                'unique:users,ssn',
             ],
             'phone' => ['required', 'string'],
             'add' => ['required', 'string']
@@ -93,19 +92,18 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
-        $user = User::create([
+        $userData = [
             'name' => $data['name'],
             'email' => $data['email'],
+            'ssn' => $data['ssn'],
             'password' => Hash::make($data['password']),
-        ]);
+        ];
         $role = Role::where('id', $data['role'])->first();
-        $user->roles()
-            ->attach($role);
+        // $user->roles()
+        //     ->attach($role);
         switch ($role->name) {
             case 'artist':
-                $artist = [
-                    'artist_ssn '=> $data['ssn'],
-                    'artist_email' => $data['email'],
+                $artistData = [
                     'name' => $data['name'],
                     'address' => $data['add'],
                     'phone' => $data['phone'],
@@ -113,17 +111,27 @@ class RegisterController extends Controller
                     'usual_medium' => $data['umedium'],
                     'usual_style' => $data['ustyle']
                 ];
-                $user->artist()->create($artist);
+                $artist = new Artist;
+                $user = $artist->user()->create($userData);
+                $user->assignRole('artist');
+                $user->save();
+                $artistData["user_id"] = $user->id;
+                $artist->create($artistData);
+                // $artist->save();
                 break;
             case 'customer':
-                $customer = [
-                    'customer_ssn '=> $data['ssn'],
-                    'customer_email' => $data['email'],
+                $customerData = [
                     'name' => $data['name'],
                     'address' => $data['add'],
                     'phone' => $data['phone']
                 ];
-                $user->customer()->create($customer);
+                $customer = new Customer;
+                $user = $customer->user()->create($userData);
+                $user->assignRole('customer');
+                $user->save();
+                $customerData["user_id"] = $user->id;
+                $customer->create($customerData);
+                // $customer->save();
             default:
                 # code...
                 break;

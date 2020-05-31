@@ -16,19 +16,19 @@ class SalerSeeder extends Seeder
     {
         for($i = 0;$i <= 3; $i++){
             $saler = new Saler;
-            $saler->saler_ssn = str_repeat((string)$i, 3)."-".str_repeat((string)$i, 5)."-".str_repeat((string)$i, 4);
-            $saler->name = "saler".$i;
-            $saler->phone = "saler phone".$i;
-            $saler->saler_email = "saler".$i."@mail.com";
-            $saler->save();
-            
-            $user = new User;
-            $user->name = "saler".$i;
-            $user->email = "saler".$i."@mail.com";
-            $user->password = Hash::make('password');
+            $userData = [
+                'name' => "saler".$i,
+                'email' => "saler".$i."@mail.com",
+                'ssn' => "s".str_repeat((string)$i, 3)."-".str_repeat((string)$i, 5)."-".str_repeat((string)$i, 4),
+                'password' => Hash::make('password')
+            ];
+            $user = $saler->user()->create($userData);
             $user->assignRole('saler');
             $user->save();
-            
+            $saler->name = "saler".$i;
+            $saler->user_id = $user->id;
+            $saler->phone = "saler phone".$i;
+            $saler->save();    
         }
     }
 }

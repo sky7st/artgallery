@@ -15,8 +15,7 @@ class CreateSalerTable extends Migration
     {
         Schema::create('saler', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('saler_ssn')->unique(); 
-            $table->string('saler_email')->unique();
+            $table->bigInteger('user_id')->unique();
             $table->string('name');
             $table->string('phone');
             $table->bigInteger('total_sale')->default('0');

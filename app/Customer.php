@@ -10,8 +10,7 @@ class Customer extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'customer_ssn',
-        'customer_email',
+        'user_id',
         'name',
         'address',
         'phone'
@@ -23,6 +22,6 @@ class Customer extends Model
     ];
     public function user()
     {
-        return $this->hasOne('App\User','email', 'customer_email');
+        return $this->hasOne('App\User','id', 'user_id');
     }
 }

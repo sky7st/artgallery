@@ -15,19 +15,20 @@ class CustomerSeeder extends Seeder
     {
         for($i = 0;$i <= 3; $i++){
             $customer = new Customer();
-            $customer->customer_ssn = str_repeat((string)$i, 3)."-".str_repeat((string)$i, 5)."-".str_repeat((string)$i, 4);
-            $customer->name = "customer".$i;
-            $customer->phone = "customer phone".$i;
-            $customer->address = "address".$i;
-            $customer->customer_email = "cust".$i."@mail.com";
-            $customer->save();
-            
-            $user = new User;
-            $user->name = "customer".$i;
-            $user->email = "cust".$i."@mail.com";
-            $user->password = Hash::make('password');
+            $userData = [
+                'name' => "customer".$i,
+                'email' => "cust".$i."@mail.com",
+                'ssn' => str_repeat((string)$i, 3)."-".str_repeat((string)$i, 5)."-".str_repeat((string)$i, 4),
+                'password' => Hash::make('password')
+            ];
+            $user = $customer->user()->create($userData);
             $user->assignRole('customer');
             $user->save();
+            $customer->name = "customer".$i;
+            $customer->user_id = $user->id;
+            $customer->phone = "customer phone".$i;
+            $customer->address = "address".$i;
+            $customer->save();
 
             // for($j = 1;$j <= 3; $j++){
             //     for($k = 1;$k <= 3; $k++){

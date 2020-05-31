@@ -10,8 +10,7 @@ class Admin extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'admin_ssn',
-        'admin_email',
+        'user_id',
         'name',
         'phone'
     ];
@@ -21,6 +20,6 @@ class Admin extends Model
     ];
     public function user()
     {
-        return $this->hasOne('App\User','email', 'admin_email');
+        return $this->hasOne('App\User','id', 'user_id');
     }
 }

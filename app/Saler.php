@@ -10,8 +10,6 @@ class Saler extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'saler_ssn',
-        'saler_email',
         'name',
         'phone'
     ];
@@ -21,6 +19,11 @@ class Saler extends Model
     ];
     public function user()
     {
-        return $this->hasOne('App\User','email', 'saler_email');
+        return $this->hasOne('App\User','id', 'user_id');
     }
+
+    // public function enquiryPair()
+    // {
+    //     return $this->belongsTo('App\EnquiryPair', 'id');
+    // }
 }

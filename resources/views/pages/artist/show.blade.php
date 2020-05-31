@@ -83,7 +83,7 @@
               <div class="form-row">
                 <div class="form-group col">
                   <label for="ssn">SSN</label>
-                  <input id="ssn" name="ssn" type="text" class="form-control" value="{{ $artist->artist_ssn }}" disabled>
+                  <input id="ssn" name="ssn" type="text" class="form-control" value="{{ $artist->user->ssn }}" disabled>
                 </div>
                 <div class="form-group col">
                   <label for="name">Name</label>

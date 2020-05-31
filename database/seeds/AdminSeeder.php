@@ -15,17 +15,19 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $admin = new Admin;
-        $admin->admin_ssn = "777-7777-777777";
-        $admin->name = "admin";
-        $admin->phone = "admin phone";
-        $admin->admin_email = "admin@mail.com";
-        $admin->save();
-        
-        $user = new User;
-        $user->name = "admin";
-        $user->email = "admin@mail.com";
-        $user->password = Hash::make('password');
+        $userData = [
+            'name' => 'admin',
+            'email' => "admin@mail.com",
+            'ssn' => "a777-7777-777777",
+            'password' => Hash::make('password')
+        ];
+        $user = $admin->user()->create($userData);
         $user->assignRole('admin');
         $user->save();
+
+        $admin->name = "admin";
+        $admin->phone = "admin phone";
+        $admin->user_id = $user->id;
+        $admin->save();
     }
 }

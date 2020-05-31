@@ -16,8 +16,7 @@ class CreateArtistTable extends Migration
         Schema::dropIfExists('artist');
         Schema::create('artist', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('artist_ssn')->unique(); 
-            $table->string('artist_email')->unique();
+            $table->bigInteger('user_id')->unique();
             $table->string('name');
             $table->string('address');
             $table->string('phone');

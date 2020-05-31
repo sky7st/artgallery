@@ -10,8 +10,7 @@ class Artist extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'artist_ssn',
-        'artist_email',
+        'user_id',
         'name',
         'address',
         'phone',
@@ -26,10 +25,10 @@ class Artist extends Model
     ];
     public function user()
     {
-        return $this->hasOne('App\User','email', 'artist_email');
+        return $this->hasOne('App\User','id', 'user_id');
     }
     public function work()
     {
-        return $this->hasMany('App\Work', 'id', 'artist_id');
+        return $this->hasMany('App\Work', 'artist_id', 'id');
     }
 }

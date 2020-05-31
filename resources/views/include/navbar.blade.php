@@ -16,7 +16,7 @@
                 @auth
                     <li>
                         @role('artist')
-                            <a href="{{ "/artist/".auth()->user()->artist->id }}" class="nav-link">My Page</a>
+                            <a href="{{ "/artist/".auth()->user()->artist()->first()->id }}" class="nav-link">My Page</a>
                         @else
 
                         @endrole

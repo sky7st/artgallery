@@ -9,6 +9,7 @@ use App\Enquiry;
 use App\User;
 use App\Work;
 use App\EnquiryPair;
+use App\Customer;
 use Auth;
 use DB;
 class EnquiryController extends Controller
@@ -72,7 +73,7 @@ class EnquiryController extends Controller
         if($role === "customer"){
             $pair = EnquiryPair::where([
                 'work_id' => $work,
-                'customer_id' => $user
+                'customer_id' => $user //user_id
             ]);
             if(!$pair->exists()){
                 $pair = new EnquiryPair;
@@ -149,7 +150,7 @@ class EnquiryController extends Controller
             $enquirys = $enquiryPair->enquirys;
             // $work = Work::where('id', $work)->first();
             // $enquirys = $work->enquirys->where("user_id", '=', $user->id);
-            return view("pages.enquiry.customer",[
+            return view("pages.enquiry.show",[
                 // "work" => $enquiryPair->work->first(),
                 "user_id" => $id,
                 // "enquirys" => $enquirys
@@ -160,7 +161,7 @@ class EnquiryController extends Controller
             // $enquirys = $work->enquirys->where("user_id", '=', $user->id);
             $enquirys = $enquiryPair->enquirys;
 
-            return view("pages.enquiry.customer",[
+            return view("pages.enquiry.show",[
                 // "work" => $enquiryPair->work->first(),
                 "user_id" => $id,
                 // "enquirys" => $enquirys

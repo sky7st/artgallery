@@ -27,7 +27,7 @@ class ArtistSeeder extends Seeder
         foreach($artists as $i=>$row){
             if($i !== 0){
                 $artist = new Artist;
-                $artist->artist_ssn = $row[0];
+                // $artist->artist_ssn = $row[0];
                 $artist->name = $row[1];
                 $artist->address = $row[2];
                 $artist->phone = $row[3];
@@ -36,15 +36,18 @@ class ArtistSeeder extends Seeder
                 $artist->usual_style = $row[6];
                 $artist->sales_last_year = (int)$row[7];
                 $artist->sales_year_to_date = (int)$row[8];
-                $artist->artist_email = "artist".$i."@mail.com";
-                $artist->save();
                 
-                $user = new User;
-                $user->name = $row[1];
-                $user->email = "artist".$i."@mail.com";
-                $user->password = Hash::make('password');
+                $userData = [
+                    'name' => $row[1],
+                    'email' => "artist".$i."@mail.com",
+                    'password' => Hash::make('password'),
+                    'ssn' => $row[0]
+                ];
+                $user = $artist->user()->create($userData);
                 $user->assignRole('artist');
                 $user->save();
+                $artist->user_id = $user->id;
+                $artist->save();
             } 
         }
     }

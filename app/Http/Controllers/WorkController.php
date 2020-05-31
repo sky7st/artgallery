@@ -30,7 +30,7 @@ class WorkController extends Controller
      */
     public function create(Request $request)
     {
-        $id = $request->user()->id;
+        $id = $request->user()->artist()->first()->id;
         $validator = Validator::make($request->all(),[
             'title' => [
                 'required',
@@ -54,7 +54,7 @@ class WorkController extends Controller
         
         $work = new Work;
         $work->title = $request->input('title');
-        $work->artist_id = $request->user()->id;
+        $work->artist_id = $id;
         $work->type = $request->input('type');
         $work->medium = $request->input('medium');
         $work->style = $request->input('style');

@@ -26,7 +26,7 @@ class EnquiryPair extends Model
     }
     public function saler()
     {
-        return $this->hasOne('App\Saler', 'id', 'saler_id');
+        return $this->hasOne('App\User', 'id', 'saler_id');
     }
     public function enquirys()
     {
