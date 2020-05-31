@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @php
-  $work = $enquiryPair->work->first();
+  $work = $enquiryPair->work;
   $enquirys = $enquiryPair->enquirys;
 @endphp
 <div class="row pt-2">
@@ -126,9 +126,9 @@
         @role('customer')
           @if(!is_null($enquiryPair->trade) && $work->state === 1)
             @if(is_null($enquiryPair->trade->cust_confirmed))
-              <button class="confirmTrade btn btn-success btn-lg ml-2" data-toggle="modal" data-target="#confirmTadeModal" data-confirm="1" data-pair="{{$enquiryPair->id}}">ACCEPT TRADE</button>
-              <button class="confirmTrade btn btn-danger btn-lg ml-2" data-toggle="modal" data-target="#confirmTadeModal" data-confirm="2" data-pair="{{$enquiryPair->id}}">REJECT TRADE</button>
-              <div id="confirmTadeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmTadeModalLabel" aria-hidden="true">
+              <button class="confirmTrade btn btn-success btn-lg ml-2" data-toggle="modal" data-target="#confirmTradeModal" data-confirm="1" data-pair="{{$enquiryPair->id}}">ACCEPT TRADE</button>
+              <button class="confirmTrade btn btn-danger btn-lg ml-2" data-toggle="modal" data-target="#confirmTradeModal" data-confirm="2" data-pair="{{$enquiryPair->id}}">REJECT TRADE</button>
+              <div id="confirmTradeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmTradeModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                   <div class="modal-content rounded-0">
                     <div class="modal-header">
@@ -272,7 +272,7 @@
   })
   @endrole
   @role('customer')
-    $('#confirmTadeModal').on('show.bs.modal', function (event) {
+    $('#confirmTradeModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) 
       var confirm = button.data('confirm') 
       var pair_id = button.data('pair')

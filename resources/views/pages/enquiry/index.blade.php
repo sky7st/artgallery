@@ -25,7 +25,7 @@
       </thead>
       <tbody>
         <tr>
-          <th>{{ $enquiry->work->title }}</th>
+          <td>{{ $enquiry->work->title }}</td>
           <td>{{ $enquiry->work->artist->name}}</td>
           <td>${{ $enquiry->work->asking_price}}</td>
           {{-- <td>{{ $enquiry->subject }}</td> --}}
