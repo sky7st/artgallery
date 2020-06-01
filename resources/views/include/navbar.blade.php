@@ -11,8 +11,12 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
+                    <a href="{{route('pages.work.index')}}" class="nav-link">Works</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('pages.artist.index')}}" class="nav-link">Artists</a>
                 </li>
+                
                 @auth
                     <li>
                         @role('artist')

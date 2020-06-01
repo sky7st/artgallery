@@ -206,7 +206,44 @@
     </div>
   @else
   <div class="trade-title mt-2">
-    <h2 class="text-success">This work is sold!!</h2>
+    <div class="row">
+      <h2 class="text-success mt-2">This work is sold!!</h2>
+      <button class="btn btn-success btn-lg ml-2" id="view-receipt" data-toggle="modal" data-target="#viewReceiptModal">CHECK PAYMENT</button>
+      
+    </div>
+    <div id="viewReceiptModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewReceiptModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content rounded-0">
+          <div class="modal-header">
+            <h3 class='col-12 modal-title text-center'>
+              PAYMENT
+              <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </h3>
+          </div>
+          <div class="modal-body" id="viewReceipt">
+            <span><h4>ART GALLERY</h4></span>
+            <span><h5>Time: {{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</h5></span>
+            <span><h5>Trade No: {{ $work->soldTrade->id }}</h5></span>
+            <span><h5>Saler: {{ $work->soldTrade->enquiry_pair->saler->name }}</h5></span>
+            <span><h5>Saler Phone: {{ $work->soldTrade->enquiry_pair->saler->phone }}</h5></span>
+            <hr>
+            <span><h4>DESCRIPTION</h4></span>
+            <span><h5>Artist Name: {{ $work->artist->name }}</h5></span>
+            <span><h5>Artist Address: {{ $work->artist->address }}</h5></span>
+            <span><h5>Artist SSN: {{ $work->artist->user->ssn }}</h5></span>
+            <span><h5>Title: {{ $work->title }}</h5></span>
+            <span><h5>Type: {{ $work->type }}</h5></span>
+            <span><h5>Medium: {{ $work->medium }}</h5></span>
+            <span><h5>Style: {{ $work->style }}</h5></span>
+            <span><h5>Size: {{ $work->size }}</h5></span>
+            <span><h4><b>Selling Price: ${{ $work->soldTrade->price }}</b></h4></span>
+            <span><h4><b>Amount Remitted: ${{ $work->soldTrade->price*0.9 }}</b></h4></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   @endif
 @endcan

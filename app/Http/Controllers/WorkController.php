@@ -20,7 +20,10 @@ class WorkController extends Controller
      */
     public function index()
     {
-        //
+        $unsoldWorks = Work::where('state', '!=', 2)->get();
+        return view('pages.work.index',[
+            'works' => $unsoldWorks
+        ]);
     }
 
     /**
@@ -108,7 +111,6 @@ class WorkController extends Controller
     public function show($id)
     {
         $work = Work::where('id', $id);
-        $user_id = Auth::user()->id;
         if($work->exists()){
             // $work = $work->with([
             //     'artist' => function ($query) {
@@ -121,7 +123,8 @@ class WorkController extends Controller
             $returnVal = [
                 'work' => $work->first()
             ];
-            if(Auth::user()->roles->first()->name === "customer"){
+            if(Auth::check() && Auth::user()->roles->first()->name === "customer"){
+                $user_id = Auth::user()->id;
                 $returnVal["user_id"] = $user_id;
             }
             return view('pages.work.show', $returnVal);
