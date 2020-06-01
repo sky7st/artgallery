@@ -96,6 +96,42 @@
           SEND REPLY
         @endrole
         </a> 
+        @role('customer')
+          @if ($work->state===2)
+            <button class="btn btn-success btn-lg ml-2" id="view-receipt" data-toggle="modal" data-target="#viewReceiptModal">VIEW RECEIPT</button>
+            <div id="viewReceiptModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewReceiptModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content rounded-0">
+                  <div class="modal-header">
+                    <h3 class='col-12 modal-title text-center'>
+                      CHECK
+                      <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                      </button>
+                    </h3>
+                  </div>
+                  <div class="modal-body" id="viewReceipt">
+                    <span><h4>ART GALLERY</h4></span>
+                    <span><h5>Time: {{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</h5></span>
+                    <span><h5>Trade No: {{ $work->soldTrade->id }}</h5></span>
+                    <span><h5>Saler: {{ $work->soldTrade->enquiry_pair->saler->name }}</h5></span>
+                    <span><h5>Saler Phone: {{ $work->soldTrade->enquiry_pair->saler->phone }}</h5></span>
+                    <hr>
+                    <span><h4>DESCRIPTION</h4></span>
+                    <span><h5>Buyer Name: {{ $work->soldTrade->enquiry_pair->customer->name }}</h5></span>
+                    <span><h5>Buyer Address: {{ $work->soldTrade->enquiry_pair->customer->address }}</h5></span>
+                    <span><h5>Work Title: {{ $work->title }}</h5></span>
+                    <span><h5>Work Type: {{ $work->type }}</h5></span>
+                    <span><h5>Work Medium: {{ $work->medium }}</h5></span>
+                    <span><h5>Work Style: {{ $work->style }}</h5></span>
+                    <span><h5>Work Size: {{ $work->size }}</h5></span>
+                    <span><h4><b>Work Price: ${{ $work->soldTrade->price }}</b></h4></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endif
+        @endrole
         @role('saler')
           @if ($work->state === 2)
             <button class="btn btn-danger btn-lg ml-2">IS SOLD</button>

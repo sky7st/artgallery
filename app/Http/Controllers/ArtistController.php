@@ -96,7 +96,7 @@ class ArtistController extends Controller
     {
         $artist = Artist::where('id', $id);
 
-        $works = Work::where('artist_id', $id)->select('id','title','image_thumb', 'asking_price')->get();
+        $works = Work::where('artist_id', $id)->get();
         // $works = Work::where('artist_id', $id);
 
         if($artist->exists()){
