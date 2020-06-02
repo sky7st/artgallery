@@ -31,7 +31,8 @@ Route::post('/enquiry/{work}/{user}/make', 'EnquiryController@create')->middlewa
 Route::post('/trade/make', 'TradeController@create')->middleware("can:make trade");
 Route::post('/trade/confirm', 'TradeController@edit')->middleware("can:confirm trade");
 
-
+Route::get('/report/saler','ReportController@salerIndex')->middleware("can:view saler report")->name('pages.report.saler_index');
+Route::post('/report/saler','ReportController@show')->middleware("can:view saler report");
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

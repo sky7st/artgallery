@@ -12,7 +12,8 @@ class WorkSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 0;$i <= 3; $i++){
+        for($i = 1;$i <= 3; $i++){
+            for($j = 0;$j <= 3; $j++){
             $path = base_path()."/database/seeds/me_sucks.png";
             $img = Image::make($path);
             //org
@@ -29,17 +30,18 @@ class WorkSeeder extends Seeder
             Storage::disk('public')->put('images/arts/thumb/'.$filethumb, $thumbnail, 'public');
 
             $work = new Work;
-            $work->title = "Me Suck".$i;
-            $work->artist_id = 1;
+            $work->title = "Me Suck Artist".$i." Work".$j;
+            $work->artist_id = $i;
             $work->type = "painting";
             $work->medium = "mix";
             $work->style = "contemporary";
             $work->size = "720X720";
             $work->image_path = $fileorg;
             $work->image_thumb = $filethumb;
-            $work->asking_price = 9487+$i;
+            $work->asking_price = 9487+$i+$j;
             $work->descript = str_repeat("Yes! I really suck!\n", 5);
             $work->save();
+            }
         }
     }
 }

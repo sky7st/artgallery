@@ -23,8 +23,12 @@ class Saler extends Model
         return $this->hasOne('App\User','id', 'user_id');
     }
 
-    // public function enquiryPair()
-    // {
-    //     return $this->belongsTo('App\EnquiryPair', 'id');
-    // }
+    public function enquiryPair()
+    {
+        return $this->hasMany('App\EnquiryPair', 'saler_id', 'user_id');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'role_user_table', 'user_id', 'role_id');
+    }
 }

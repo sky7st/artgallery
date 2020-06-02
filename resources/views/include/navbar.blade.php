@@ -36,6 +36,11 @@
                             </a>
                         </li>
                     @endif
+                    @role('admin')
+                        <li class="nav-item">
+                            <a href="{{route('pages.report.saler_index')}}" class="nav-link">Saler Report</a>
+                        </li>
+                    @endrole
                 @endauth
                 <li class="nav-item">
                     <a href="#" class="nav-link">About</a>
