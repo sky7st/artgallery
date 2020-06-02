@@ -76,6 +76,39 @@ class ReportController extends Controller
         ]);
     }
 
+    public function salerSelf(){
+        return view('pages.report.saler_self');
+    }
+    public function salerSelfNoDate(Request $request){
+        $saler_id = $request->user()->saler()->first()->id;
+        $salers = Saler::where('id', $saler_id)->first();
+        $salers->allSoldTrade;
+        $salers["totalSum"] = (int)$salers->totalSum;
+        $salers = [$salers];
+        return response()->json([
+            'msg' => 'success',
+            'data' => [
+                'salers' => $salers
+            ]
+        ]);
+    }
+
+    public function salerSelfDate(Request $request){
+        $saler_id = $request->user()->saler()->first()->id;
+        $salers = Saler::where('id', $saler_id)->first();
+        $start = date('Y-m-d 00:00:00', strtotime($request->input('start')));
+        $end = date('Y-m-d 23:59:59', strtotime($request->input('end')));
+        $salers->setReportDate($start, $end);
+        $salers->soldTradeBetween;
+        $salers["betweenSum"] = (int)$salers->betweenSum;
+        $salers = [$salers];
+        return response()->json([
+            'msg' => 'success',
+            'data' => [
+                'salers' => $salers
+            ]
+        ]);
+    }
     public function salerShowNoDate($id)
     {
 

@@ -36,6 +36,10 @@ Route::post('/trade/confirm', 'TradeController@edit')->middleware("can:confirm t
 Route::get('/report/saler','ReportController@salerIndex')->middleware("can:view saler report")->name('pages.report.saler_index');
 Route::post('/report/saler','ReportController@salerShow')->middleware("can:view saler report");
 Route::get('/report/saler/{id}','ReportController@salerShowNoDate')->middleware("can:view saler report");
+Route::get('/report/self', 'ReportController@salerSelf')->middleware('can:view self sold')->name('pages.report.self_sold');
+Route::get('/report/self/get', 'ReportController@salerSelfNoDate')->middleware('can:view self sold');
+Route::post('/report/self/get', 'ReportController@salerSelfDate')->middleware('can:view self sold');
+
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

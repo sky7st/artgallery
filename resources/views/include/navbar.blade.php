@@ -36,6 +36,11 @@
                             </a>
                         </li>
                     @endif
+                    @role('saler|admin')
+                        <li class="nav-item">
+                            <a href="{{route('pages.report.self_sold')}}" class="nav-link">My Sold</a>
+                        </li>
+                    @endrole
                     @role('admin')
                         <li class="nav-item">
                             <a href="{{route('pages.report.saler_index')}}" class="nav-link">Saler Report</a>

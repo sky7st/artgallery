@@ -137,8 +137,11 @@
       var total = ""
       if (saler.totalSum)
         total = "$" + saler.totalSum 
+      else if(saler.betweenSum)
+        total = "$" + saler.betweenSum 
       else
-        total = "$" + saler.betweenSum
+        total = "$0"
+      
       salerCard.find('#saler-total').text(total)
       salerCard.show()
       $('#saler-list').append(salerCard)
