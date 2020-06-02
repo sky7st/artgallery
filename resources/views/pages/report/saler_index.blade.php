@@ -153,8 +153,10 @@
         saleWorks.forEach(item => {
           var workItem = work.clone()
           // console.log(item)
-          workItem.find('#title').text(item.enquiry_pair.work.title)
-          workItem.find('#artist').text(item.enquiry_pair.work.artist.name)
+          var title = '<a href="/work/' + item.enquiry_pair.work.id + '">' + item.enquiry_pair.work.title + '</a>'
+          workItem.find('#title').html(title)
+          var artist = '<a href="/artist/' + item.enquiry_pair.work.artist.id + '">' + item.enquiry_pair.work.artist.name + '</a>'
+          workItem.find('#artist').html(artist)
           workItem.find('#ask-price').text("$"+item.enquiry_pair.work.asking_price)
           workItem.find('#sold-price').text("$"+item.price)
           workItem.find('#time').text(item.artist_confirmed_at)

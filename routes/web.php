@@ -11,7 +11,9 @@ use App\Http\Middleware\EnquiryAccess;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/',function(){
+    return redirect('/work');
+});
 
 Route::get('/artist', 'ArtistController@index')->name('pages.artist.index');
 Route::get('/artist/{id}', 'ArtistController@show')->name('pages.artist.show');

@@ -14,6 +14,9 @@
       @endcan
     @endcan
   </div>
+  <div class="container text-center col-6">
+    <h4>Artworks by {{ $artist->name }}</h4>
+  </div>
 </div>
 <div class="row">
   <div class="col-5 mt-2">
@@ -30,11 +33,8 @@
       </div>
     </div>
   </div>
-  <div class="col-7 mt-2">
-    <div class="container text-center">
-      <h4>Artworks by {{ $artist->name }}</h4>
-    </div>
-    <div class="col-12 mt-2 pl-0 pr-0 text-center" id="product_list">
+  <div class="col-7">
+    <div class="col-12 pl-0 pr-0 text-center" id="product_list">
       <div class="container">
         <ul class="d-flex flex-wrap list-group-horizontal">
           @foreach ($works as $index=>$work)
@@ -60,14 +60,27 @@
                 <div class="work-price">
                     ${{ $work->asking_price}}
                 </div>
-                @role('admin')
-                  @if ($work->state === 2)
+                @role('admin|artist')
+                  @if(auth()->user()->roles->first()->name === "artist")
+                    @can('isHimSelf', $artist->user, Auth::user())
+                      @if ($work->state === 2)
+                        <div class="work-sold text-danger">
+                          <span><b>Sold: ${{ $work->soldTrade->price }}</b></span> 
+                        </div> 
+                        <div class="work-sold-time text-danger">                     
+                          <span><b>Sold Time: ${{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</b></span>
+                        </div>
+                      @endif
+                    @endcan
+                  @else
+                    @if ($work->state === 2)
                     <div class="work-sold text-danger">
                       <span><b>Sold: ${{ $work->soldTrade->price }}</b></span> 
                     </div> 
                     <div class="work-sold-time text-danger">                     
                       <span><b>Sold Time: ${{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</b></span>
                     </div>
+                    @endif
                   @endif
                 @endrole
               </div>

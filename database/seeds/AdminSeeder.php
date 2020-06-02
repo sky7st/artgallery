@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Admin;
 use App\User;
+use App\Saler;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 class AdminSeeder extends Seeder
@@ -22,12 +23,17 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('password')
         ];
         $user = $admin->user()->create($userData);
-        $user->assignRole('admin');
+        $user->assignRole('saler','admin');
         $user->save();
 
         $admin->name = "admin";
         $admin->phone = "admin phone";
         $admin->user_id = $user->id;
         $admin->save();
+        $saler = new Saler;
+        $saler->name = "saler admin";
+        $saler->user_id = $user->id;
+        $saler->phone = "admin phone";
+        $saler->save();    
     }
 }
