@@ -62,7 +62,16 @@
     </div>
     @can('isHimSelf', $work->artist->user, Auth::user())
     @else
-      @role('saler')
+      @role('saler|admin')
+        @if ($work->state === 2)
+          <div class="want-buy row mt-4 text-left">
+            <button class="btn btn-danger btn-lg" disabled="disabled">SOLD</button>  
+          </div>
+        @else
+          <div class="want-buy row mt-4 text-left">
+            <button class="btn btn-success btn-lg" disabled="disabled">UNSOLD</button>  
+          </div>
+        @endif
       @else
         <div class="want-buy row mt-4 text-left">
           <div class="col">
@@ -75,54 +84,58 @@
               @endrole('customer')
             </div>
             <div class="row">
-              @guest
-                <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE ENQUIRY</a>   
-              @endguest
-              @auth
-                @can('buy works')
-                <a href="#" class="btn btn-primary btn-lg" id="make-enquiry" data-toggle="modal" data-target="#makeEnquiryModal">MAKE ENQUIRY</a> 
-                <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
-                    <div class="modal-content rounded-0">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body" id="makeEnquiry">
-                        <form id="enquiryForm">
-                          @csrf
-                          <input type="hidden" name="work" value="{{ $work->id }}">
-                          @role('customer')
-                            <input type="hidden" name="user" value="{{ $user_id }}">
-                          @endrole
-                          <div class="form-row">
-                            <div class="form-group col">
-                              <label for="name">Name</label>
-                              <input type="text" name="name" value="{{ auth()->user()->name }}" class="enquiry-input form-control" id="name" placeholder="Name"  readonly="readonly"/>
+              @if ($work->state === 2)
+                <button class="btn btn-danger btn-lg" disabled="disabled">SOLD</button>  
+              @else
+                @guest
+                  <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE ENQUIRY</a>   
+                @endguest
+                @auth
+                  @can('buy works')
+                  <a href="#" class="btn btn-primary btn-lg" id="make-enquiry" data-toggle="modal" data-target="#makeEnquiryModal">MAKE ENQUIRY</a> 
+                  <div id="makeEnquiryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="makeEnquiryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content rounded-0">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" id="makeEnquiry">
+                          <form id="enquiryForm">
+                            @csrf
+                            <input type="hidden" name="work" value="{{ $work->id }}">
+                            @role('customer')
+                              <input type="hidden" name="user" value="{{ $user_id }}">
+                            @endrole
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" value="{{ auth()->user()->name }}" class="enquiry-input form-control" id="name" placeholder="Name"  readonly="readonly"/>
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="form-group col">
-                              <label for="email">Email</label>
-                              <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" value="{{ auth()->user()->email }}" class="enquiry-input form-control" id="email" placeholder="Email"  readonly="readonly"/>
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="form-group col">
-                              <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <textarea id="query" name="query" rows="4" placeholder="Query" class="enquiry-input form-control" required></textarea>
+                              </div>
                             </div>
-                          </div>
-                        </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" id="submitEnquiry" class="btn btn-primary mr-auto rounded-0">Submit</button>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" id="submitEnquiry" class="btn btn-primary mr-auto rounded-0">Submit</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                @endcan
-              @endauth
+                  @endcan
+                @endauth
+              @endif
             </div>
           </div>
         </div>

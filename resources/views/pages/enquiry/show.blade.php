@@ -132,7 +132,7 @@
             </div>
           @endif
         @endrole
-        @role('saler')
+        @role('saler|admin')
           @if ($work->state === 2)
             <button class="btn btn-danger btn-lg ml-2">IS SOLD</button>
           @else
@@ -257,7 +257,7 @@
         <div class="media text-muted pt-3">
           <p class="media-body pb-3 mb-0 lh-125 border-bottom border-gray
             @role('customer') @if ($enquiry->user_type === "customer") text-right @endif @endrole
-            @role('saler') @if ($enquiry->user_type === "saler") text-right @endif @endrole">
+            @role('saler|admin') @if ($enquiry->user_type === "saler" || $enquiry->user_type === "admin") text-right @endif @endrole">
             <span class="d-block ">
               @if ($enquiry->user_type === "customer")
                 @role('customer')
@@ -300,7 +300,7 @@
       })
     }
   })
-  @role('saler')
+  @role('saler|admin')
     $('#submitTrade').click(function (e) {
       var form = $('#tradeForm')[0];
       if(form.reportValidity()){

@@ -59,7 +59,7 @@
   @endif 
 </div>  
 @endrole
-@role('saler')
+@role('saler|admin')
 <div class="enquiry-title mt-2">
   <h2>All Unsold Work</h2>
 </div>
