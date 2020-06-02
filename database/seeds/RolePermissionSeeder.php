@@ -78,6 +78,9 @@ class RolePermissionSeeder extends Seeder
             $permissionCustomerUpdate,
             $permissionOwnerUpdate,
             $permissionSalerUpdate,
+            $permissionViewAllEnquiry,
+            $permissionMakeTrade,
+            $permissionEnquiry,
             $permissionViewSalerReport
         ]);
         

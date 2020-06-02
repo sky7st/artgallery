@@ -49,15 +49,55 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function salerShow(Request $request)
     {
-        //
+        $saler_id = $request->input('saler');
+        $start = date('Y-m-d 00:00:00', strtotime($request->input('start')));
+        $end = date('Y-m-d 23:59:59', strtotime($request->input('end')));
+        if((int)$saler_id === -1){
+            $salers = Saler::all();
+            $salers->map(function ($saler)use($start, $end){
+                $saler->setReportDate($start, $end);
+                $saler->soldTradeBetween;
+                $saler["betweenSum"] = (int)$saler->betweenSum;
+            });      
+        }else{
+            $salers = Saler::where('id', $saler_id)->first();
+            $salers->setReportDate($start, $end);
+            $salers->soldTradeBetween;
+            $salers["betweenSum"] = (int)$salers->betweenSum;
+            $salers = [$salers];
+        }
         return response()->json([
             'msg' => 'success',
-            'data' => ''
+            'data' => [
+                'salers' => $salers
+            ]
         ]);
     }
 
+    public function salerShowNoDate($id)
+    {
+
+        if((int)$id === -1){
+            $salers = Saler::all();
+            $salers->map(function ($saler){
+                $saler->allSoldTrade;
+                $saler["totalSum"] = (int)$saler->totalSum;
+            });      
+        }else{
+            $salers = Saler::where('id', $id)->first();
+            $salers->allSoldTrade;
+            $salers["totalSum"] = (int)$salers->totalSum;
+            $salers = [$salers];
+        }
+        return response()->json([
+            'msg' => 'success',
+            'data' => [
+                'salers' => $salers
+            ]
+        ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

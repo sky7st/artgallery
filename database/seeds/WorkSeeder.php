@@ -12,7 +12,7 @@ class WorkSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 1;$i <= 3; $i++){
+        for($i = 1;$i <= 5; $i++){
             for($j = 0;$j <= 3; $j++){
             $path = base_path()."/database/seeds/me_sucks.png";
             $img = Image::make($path);

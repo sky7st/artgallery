@@ -6,6 +6,7 @@
   <div class="col-3">
     <label for="saler-select">Select Saler</label>
     <select name="saler" class="form-control" id="saler-select" aria-required="true">
+      <option value="-1">All Salers</option>
       @foreach ($salers as $saler)
       <option value="{{ $saler->id }}">{{ $saler->name }}</option>
       @endforeach
@@ -20,10 +21,75 @@
     <input type="date" name="end" id="endTime" class="form-control" required>
   </div>
   <div class="col-1 my-4">
-    <button class="btn btn-primary rounded-0 form-control" id="searchBtn">Search</button>
+    <button class="btn btn-primary rounded-0" id="searchBtn">Search</button>
+  </div>
+  <div class="col my-4">
+    <button class="btn btn-success rounded-0" id="searchAllBtn" type="button">Search With Out Date</button>
   </div>
 </div>
 </form>
+<div class="card mt-2" style="display:none" id="saler-card">
+  <div class="card-header">
+    <div class="col">
+      <div class="row">
+        <div class="col-6">
+          <h2><span id="saler-name"></span></h2>
+        </div>
+        <div class="col-6 text-right">
+          <h2><span id="saler-total" class="text-danger"></span></h2> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="list-group list-group-flush" id="work-list">
+    
+  </ul>
+  <li class="list-group-item" id="work-li" style="display: none"> 
+    <div class="row">
+      <div class="title-work col-3">
+        <div class="title-label row">
+          <span>Title:</span>
+        </div>
+        <div class="title row">
+          <span><h5 id="title"></h5></span>
+        </div>
+      </div>
+      <div class="artist-work col-2">
+        <div class="artist-label row">
+          <span>Artist:</span>
+        </div>
+        <div class="artist row">
+          <span><h5 id="artist"></h5></span>
+        </div>
+      </div>
+      <div class="ask-price-work col-2">
+        <div class="ask-price-label row">
+          <span>Asking Price:</span>
+        </div>
+        <div class="ask-price row">
+          <span><h5 id="ask-price"></h5></span>
+        </div>
+      </div>
+      <div class="sold-price-work col-2">
+        <div class="sold-price-label row">
+          <span>Sold Price:</span>
+        </div>
+        <div class="sold-price row">
+          <span><h5 id="sold-price"></h5></span>
+        </div>
+      </div>
+      <div class="time-work col-3">
+        <div class="time-label row">
+          <span>Sold Time:</span>
+        </div>
+        <div class="time row">
+          <span><h5 id="time"></h5></span>
+        </div>
+      </div>
+    </div> 
+  </li> 
+</div>
+<div id="saler-list"></div>
 
 <script>
   $('#searchBtn').click(function (e) {
@@ -35,10 +101,68 @@
       url: "/report/saler",
       data: $(form).serialize(),
       success: function (response) {
-        console.log(response)
+        if(response.msg === "success"){
+          var salers = response.data.salers
+          // console.log(salers)
+          renderSalers(salers)
+        }
       }
     })  
     }
   })
+  $('#searchAllBtn').click(function (e) {
+    var saler = $('#saler-select').val()
+    console.log(saler)
+    var data = {
+      "id": saler
+    }
+    $.ajax({
+      method: "GET",
+      url: "/report/saler/"+saler,
+      success: function (response) {
+        if(response.msg === "success"){
+          var salers = response.data.salers
+          // console.log(salers)
+          renderSalers(salers)
+        }
+      }
+    })  
+  })
+  function renderSalers(salers) {
+    $('#saler-list').html('')
+    salers.forEach( saler => {
+      console.log(saler)
+      var salerCard = $('#saler-card').clone()
+      salerCard.find('#saler-name').text(saler.name)
+      var total = ""
+      if (saler.totalSum)
+        total = "$" + saler.totalSum 
+      else
+        total = "$" + saler.betweenSum
+      salerCard.find('#saler-total').text(total)
+      salerCard.show()
+      $('#saler-list').append(salerCard)
+
+      var saleWorks = saler.all_sold_trade ? saler.all_sold_trade : saler.sold_trade_between
+      var workList = salerCard.find('#work-list')
+      var work = salerCard.find('#work-li')
+      workList.html('')
+      if(saleWorks.length === 0)
+        workList.html('<li class="list-group-item">No Sold Work</li>')
+      else{
+        saleWorks.forEach(item => {
+          var workItem = work.clone()
+          // console.log(item)
+          workItem.find('#title').text(item.enquiry_pair.work.title)
+          workItem.find('#artist').text(item.enquiry_pair.work.artist.name)
+          workItem.find('#ask-price').text("$"+item.enquiry_pair.work.asking_price)
+          workItem.find('#sold-price').text("$"+item.price)
+          workItem.find('#time').text(item.artist_confirmed_at)
+          workItem.show()
+          workList.append(workItem)
+        })
+      }
+    })
+  }
 </script>
 @endsection
