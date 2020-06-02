@@ -20,8 +20,10 @@
     <div class="card">
       <div class="card-body">
       <h3 class="card-title">{{ $artist->name }}</h3>
+      @role('admin')
         <p class="card-text">Address: {{ $artist->address }}</p>
         <p class="card-text">Phone: {{ $artist->phone }}</p>
+      @endrole
         <p class="card-text">Type: {{ $artist->usual_type }}</p>
         <p class="card-text">Medium: {{ $artist->usual_medium }}</p>
         <p class="card-text">Style: {{ $artist->usual_style }}</p>
@@ -46,18 +48,28 @@
               @endcan --}}
               <div class="work-info">
                 <a href="{{ '/work/'.$work->id }}">
-                  <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 200px; max-height: 250px;" alt="no image">
+                  <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 160px; max-height: 220px;" alt="no image">
                 </a>
                 <div class="work-detail mt-1">
                   <span class="text-center">
                     <a href="{{ '/work/'.$work->id }}" class="work-link">
-                      <h3>{{ $work->title }}</h3>
+                      <h4>{{ $work->title }}</h4>
                     </a>
                   </span>
                 </div>
                 <div class="work-price">
                     ${{ $work->asking_price}}
                 </div>
+                @role('admin')
+                  @if ($work->state === 2)
+                    <div class="work-sold text-danger">
+                      <span><b>Sold: ${{ $work->soldTrade->price }}</b></span> 
+                    </div> 
+                    <div class="work-sold-time text-danger">                     
+                      <span><b>Sold Time: ${{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</b></span>
+                    </div>
+                  @endif
+                @endrole
               </div>
             </li>
           @endforeach

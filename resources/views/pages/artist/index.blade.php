@@ -13,8 +13,10 @@
         <tr>
           <th data-field="id">ID</th>
           <th data-field="name">Artist Name</th>
-          <th data-field="address">Artist Address</th>
-          <th data-field="phone">Phone</th>
+          @role('admin')
+            <th data-field="address">Artist Address</th>
+            <th data-field="phone">Phone</th>
+          @endrole
           <th data-field="usual_type">Type</th>
           <th data-field="usual_medium">Medium</th>
           <th data-field="usual_style">Style</th>
@@ -27,8 +29,10 @@
       <tr class="table-row">
         <th id="artist_id">{{ $artist->id }}</th>
         <th>{{ $artist->name }}</th>
-        <th>{{ $artist->address }}</th>
-        <th>{{ $artist->phone }}</th>
+        @role('admin')
+          <th>{{ $artist->address }}</th>
+          <th>{{ $artist->phone }}</th>
+        @endrole
         <th>{{ $artist->usual_type }}</th>
         <th>{{ $artist->usual_medium }}</th>
         <th>{{ $artist->usual_style }}</th>
