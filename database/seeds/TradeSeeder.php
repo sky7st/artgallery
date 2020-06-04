@@ -26,10 +26,24 @@ class TradeSeeder extends Seeder
             $trade = new Trade;
             $enquiryPairData = [
                 'work_id' => $i,
-                'customer_id' => 80,
+                'customer_id' => 80 + (int)$i/5,
                 'saler_id' => 84 + $i % 4
             ];
             $enquiryPair = $trade->enquiry_pair()->create($enquiryPairData);
+            $enquiryCustData = [
+                'work_id' => $i,
+                'user_type' => 'customer',
+                'user_id' => 80 + (int)$i/5,
+                'content' => 'customer enquiry'.$i
+            ];
+            $enquiryPair->enquirys()->create($enquiryCustData);
+            $enquirSalerData = [
+                'work_id' => $i,
+                'user_type' => 'saler',
+                'user_id' => 84 + $i % 4,
+                'content' => 'saler enquiry'.$i
+            ];
+            $enquiryPair->enquirys()->create($enquirSalerData);
             $tradeData['enquiry_pair_id'] = $enquiryPair->id;
             $tradeObj = $trade->create($tradeData);
             $enquiryPair->trade_id = $tradeObj->id;

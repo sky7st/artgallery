@@ -6,7 +6,10 @@
 require('./bootstrap');
 // Register $ global var for jQuery
 import $ from 'jquery';
-window.$ = window.jQuery = $;
+//window.$ = window.jQuery = $;
+global.$ = global.jQuery = $;
+require('./jquery.magnify');
+//require('./mlens')
 // Import jQuery Plugins
 // import 'jquery-ui/ui/widgets/datepicker.js';
 

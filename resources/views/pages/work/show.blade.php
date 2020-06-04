@@ -1,8 +1,12 @@
 @extends('layouts.app')
 @section('content')
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/magnify/2.3.3/js/jquery.magnify.min.js"></script> --}}
+{{-- <script src="{{asset('js/jquery.magnify.js')}}"></script> --}}
 <div class="row pt-2">
   <div class="work-image col-12 col-sm-12 col-md-7 col-lg-8">
-    <img src="{{ '/storage/images/arts/org/'.$work->image_path }}" style="max-width: 580px; max-height: 600px;">
+    <a href="{{ '/storage/images/arts/org/'.$work->image_path }}">
+      <img src="{{ '/storage/images/arts/org/'.$work->image_path }}" class="zoom" style="max-width: 580px; max-height: 600px;">
+    </a>
   </div>
   <div class="work-descript col-12 col-sm-12 col-md-5 col-lg-4 pr-md-0 pr-lg-0">
     <div class="page-title row text-left">
@@ -304,6 +308,9 @@
     })
   @endcan
 @endrole
+$(document).ready(function() {
+  $('.zoom').magnify();
+});
 </script>
 
 <style>
@@ -319,5 +326,9 @@
   .enquiry-input{
     border-radius:0px !important;
   }
+  .magnify > .magnify-lens {
+  width: 150px;
+  height: 150px;
+}
 </style>
 @endsection

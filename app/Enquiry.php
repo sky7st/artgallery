@@ -12,7 +12,7 @@ class Enquiry extends Model
         'work_id',
         'user_type',
         'user_id',
-        'subject',
+        //'subject',
         'content'
     ];
 

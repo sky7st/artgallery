@@ -68,7 +68,7 @@
                           <span><b>Sold: ${{ $work->soldTrade->price }}</b></span> 
                         </div> 
                         <div class="work-sold-time text-danger">                     
-                          <span><b>Sold Time: ${{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</b></span>
+                          <span><b>Sold Time: {{ date_format(date_create($work->soldTrade->artist_confirmed_at), 'Y-m-d H:i') }}</b></span>
                         </div>
                       @endif
                     @endcan

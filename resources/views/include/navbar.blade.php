@@ -43,7 +43,7 @@
                     @endrole
                     @role('admin')
                         <li class="nav-item">
-                            <a href="{{route('pages.report.saler_index')}}" class="nav-link">Saler Report</a>
+                            <a href="{{route('pages.report.saler_index')}}" class="nav-link">Salers Report</a>
                         </li>
                     @endrole
                 @endauth
