@@ -20,6 +20,11 @@
           <th data-field="usual_type">Type</th>
           <th data-field="usual_medium">Medium</th>
           <th data-field="usual_style">Style</th>
+          @role('admin')
+            <th data-field="sale-ly">Sale Last Year</th>
+            <th data-field="sale-y2d">Sale Years to Date</th>
+            {{-- <th data-field="phone">Phone</th> --}}
+          @endrole
           @can("delete artist")
             <th data-field="delete_artist">Delete</th>
           @endcan
@@ -36,6 +41,10 @@
         <th>{{ $artist->usual_type }}</th>
         <th>{{ $artist->usual_medium }}</th>
         <th>{{ $artist->usual_style }}</th>
+        @role('admin')
+          <th>{{ $artist->sales_last_year }}</th>
+          <th>{{ $artist->sales_year_to_date }}</th>
+        @endrole
         @can("delete artist")
           <th><button class="delete_artist btn btn-danger" data-delete="{{$artist->id}}">Delete</button> </th>
         @endcan

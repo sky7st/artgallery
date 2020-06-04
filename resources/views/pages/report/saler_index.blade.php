@@ -61,29 +61,61 @@
         <div class="artist row">
           <span><h5 id="artist"></h5></span>
         </div>
-      </div>
-      <div class="ask-price-work col-2">
-        <div class="ask-price-label row">
-          <span>Asking Price:</span>
+        <div class="customer-label row">
+          <span>Customer:</span>
         </div>
-        <div class="ask-price row">
-          <span><h5 id="ask-price"></h5></span>
+        <div class="customer row">
+          <span><h5 id="customer"></h5></span>
         </div>
       </div>
-      <div class="sold-price-work col-2">
-        <div class="sold-price-label row">
-          <span>Sold Price:</span>
+      <div class="col">
+        <div class="row">
+          <div class="col-3">
+            <div class="ask-price-label">
+              <span>Asking Price:</span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="ask-price-label">
+              <span>Sold Price:</span>
+            </div>
+          </div>
+          <div class="time-work col-3">
+            <div class="time-label">
+              <span>Sold Time:</span>
+            </div>
+          </div>
         </div>
-        <div class="sold-price row">
-          <span><h5 id="sold-price"></h5></span>
+        <div class="row">
+          <div class="col-3">
+            <div class="ask-price-label">
+              <span><h5 id="ask-price"></h5></span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="ask-price-label">
+              <span><h5 id="sold-price"></h5></span>
+            </div>
+          </div>
+          <div class="time-work col-4">
+            <div class="time-label">
+              <span><h5 id="time"></h5></span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="time-work col-3">
-        <div class="time-label row">
-          <span>Sold Time:</span>
+        <div class="row">
+          <div class="col-3">
+            <div class="address-label">
+              <span>Customer Address:</span>
+            </div>
+          </div>
         </div>
-        <div class="time row">
-          <span><h5 id="time"></h5></span>
+        <div class="row">
+          <div class="col-3">
+            <div class="address-artist">
+              <span><h5 id="address"></h5></span>
+            </div>
+          </div>
         </div>
       </div>
     </div> 
@@ -122,7 +154,7 @@
       success: function (response) {
         if(response.msg === "success"){
           var salers = response.data.salers
-          // console.log(salers)
+          console.log(salers)
           renderSalers(salers)
         }
       }
@@ -163,6 +195,8 @@
           workItem.find('#ask-price').text("$"+item.enquiry_pair.work.asking_price)
           workItem.find('#sold-price').text("$"+item.price)
           workItem.find('#time').text(item.artist_confirmed_at)
+          workItem.find('#customer').text(item.enquiry_pair.customer.name)
+          workItem.find('#address').text(item.enquiry_pair.customer.address)
           workItem.show()
           workList.append(workItem)
         })
