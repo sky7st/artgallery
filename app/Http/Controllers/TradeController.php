@@ -159,7 +159,16 @@ class TradeController extends Controller
                 $pair->trade->artist_confirmed_at = now();
                 $pair->trade->save();
                 if(!$confirm){
+                    $dataEnquiry = [
+                        'pair_id' => $pair->id,
+                        'work_id' => $pair->work_id,
+                        'user_id' => $pair->saler_id,
+                        'user_type' => "saler",
+                        'content' => "Hi, the artist rejected the trade! Maybe we should talk more.(System Message)"
+                    ];
+                    $pair->enquirys()->create($dataEnquiry);
                     $pair->trade_id = null;
+                    $pair->saler_last_time = now();
                     $pair->save();
                 }else{
                     $dataEnquiry = [
@@ -167,7 +176,7 @@ class TradeController extends Controller
                         'work_id' => $pair->work_id,
                         'user_id' => $pair->saler_id,
                         'user_type' => "saler",
-                        'content' => $confirm ? "Hi, the artist confirmed the trade!The trade is success!!" : "Hi, the artist rejected the trade!"
+                        'content' => "Hi, the artist confirmed the trade!The trade is success!!(System Message)"
                     ];
                     $pair->enquirys()->create($dataEnquiry);
                     $pair->saler_last_time = now();

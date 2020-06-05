@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="row">
   <div class="col-6">
     <button class="btn btn-primary" onclick="javascript:history.back()">Back</button>
@@ -38,7 +39,20 @@
       <div class="container">
         <ul class="d-flex flex-wrap list-group-horizontal">
           @foreach ($works as $index=>$work)
+            @php
+              $trades = $work->enquiryPair()->with(['trade' => function($query){
+                  $query->whereNotNull('cust_confirmed')->whereNull('artist_confirmed');
+                }])->get();
+              $trades = $trades->filter(function($trade){
+                  return !is_null($trade->trade);
+                });
+            @endphp
             <li class="list-group-item justify-content-left align-items-center mr-auto mt-2 @if($work->state === 2) list-group-item-success @endif">
+              @can('isHimSelf', $artist->user, Auth::user())
+                @if (!$trades->isEmpty())
+                  <div class="fa fa-exclamation-circle align-items-right ml-auto mb-1 text-danger">New Request!</div>
+                @endif
+              @endcan
               {{-- @can('delete work')
                 @can('isHimSelf', $artist->user, Auth::user())
                   <button type="button" id="deleteWorkBtn" class="delete-work close align-items-right mb-1">
@@ -47,6 +61,7 @@
                 @endcan
               @endcan --}}
               <div class="work-info">
+                {{-- {{ $trades }} --}}
                 <a href="{{ '/work/'.$work->id }}">
                   <img src="{{ '/storage/images/arts/thumb/'.$work->image_thumb }}" style="max-width: 160px; max-height: 220px;" alt="no image">
                 </a>
@@ -405,6 +420,15 @@
   .close:focus{
     outline: none;
     box-shadow: none;
+  }
+  .alert .glyphicon{
+    display:table-cell;
+  }
+
+  .alert div,
+  .alert span{
+      padding-left: 5px;
+      display:table-cell;
   }
 </style>
 @endsection

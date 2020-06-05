@@ -205,7 +205,7 @@
               </div>
               @else
               @if($enquiryPair->trade->cust_confirmed === 1)
-                <button class="btn btn-secondary btn-lg ml-2" disabled>TRADE ACCEPTED</button>
+                <button class="btn btn-secondary btn-lg ml-2" disabled>TRADE ACCEPTED <br> WAITING FOR ARTIST CONFIRM</button>
               @else
                 <button class="btn btn-secondary btn-lg ml-2" disabled>TRADE REJECTED</button>
               @endif
