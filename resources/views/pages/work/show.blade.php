@@ -88,8 +88,13 @@
               @endrole('customer')
             </div>
             <div class="row">
+              {{-- {{ $work->enquiryPair }} --}}
               @if ($work->state === 2)
                 <button class="btn btn-danger btn-lg" disabled="disabled">SOLD</button>  
+                @if ($work->enquiryPair->first()->customer_id === auth()->user()->id)
+                  <a href="/enquiry/{{ $work->id }}/{{ $work->enquiryPair->first()->customer_id }}" 
+                    class="btn btn-success btn-lg ml-2">MY ENQUIRY</a>  
+                @endif
               @else
                 @guest
                   <a href="/login" class="btn btn-danger btn-lg">LOGIN TO MAKE ENQUIRY</a>   
