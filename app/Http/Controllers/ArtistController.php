@@ -17,9 +17,14 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        $results = Artist::paginate(10);
+        $artists = Artist::paginate(10);
+        $artists->map(function($artist){
+            $artist->soldReport;
+            $artist["thisYearSum"] = (int)$artist->thisYearSum;
+            $artist["lastYearSum"] = (int)$artist->lastYearSum;
+        });
         return view('pages.artist.index', [
-            "artists" => $results
+            "artists" => $artists
         ]);
     }
 

@@ -1,12 +1,5 @@
 @extends('layouts.app')
 @section('content')
-{{-- @auth
-@can("update artist data")
-<div id="artist-top-bar">
-  <button class="btn btn-primary" data-toggle="modal" data-target="#insertArtist">Insert</button>
-</div>
-@endcan
-@endauth --}}
 <div id="artist-list" class="table-responsive-xl mt-2">
   <table class="table table-bordered table-condensed table-striped table-hover" id="artist_list" data-toggle="table" data-strip="true" data-pagination="true">
     <thead class="col-auto">
@@ -22,8 +15,7 @@
           <th data-field="usual_style">Style</th>
           @role('admin')
             <th data-field="sale-ly">Sale Last Year</th>
-            <th data-field="sale-y2d">Sale Years to Date</th>
-            {{-- <th data-field="phone">Phone</th> --}}
+            <th data-field="sale-y2d">Sale This Year</th>
           @endrole
           @can("delete artist")
             <th data-field="delete_artist">Delete</th>
@@ -42,8 +34,8 @@
         <th>{{ $artist->usual_medium }}</th>
         <th>{{ $artist->usual_style }}</th>
         @role('admin')
-          <th>{{ $artist->sales_last_year }}</th>
-          <th>{{ $artist->sales_year_to_date }}</th>
+          <th>${{ $artist->lastYearSum }}</th>
+          <th>${{ $artist->thisYearSum }}</th>
         @endrole
         @can("delete artist")
           <th><button class="delete_artist btn btn-danger" data-delete="{{$artist->id}}">Delete</button> </th>
