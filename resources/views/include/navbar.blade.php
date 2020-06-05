@@ -45,11 +45,14 @@
                         <li class="nav-item">
                             <a href="{{route('pages.report.saler_index')}}" class="nav-link">Salers Report</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('pages.report.customer_index')}}" class="nav-link">All Customers</a>
+                        </li>
                     @endrole
                 @endauth
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">About</a>
-                </li>
+                </li> --}}
             </ul>
 
             <!-- Right Side Of Navbar -->

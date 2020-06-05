@@ -1,5 +1,6 @@
 <?php
 use App\Http\Middleware\EnquiryAccess;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +40,7 @@ Route::get('/report/saler/{id}','ReportController@salerShowNoDate')->middleware(
 Route::get('/report/self', 'ReportController@salerSelf')->middleware('can:view self sold')->name('pages.report.self_sold');
 Route::get('/report/self/get', 'ReportController@salerSelfNoDate')->middleware('can:view self sold');
 Route::post('/report/self/get', 'ReportController@salerSelfDate')->middleware('can:view self sold');
-
+Route::get('/report/customer', 'ReportController@customerIndex')->middleware('can:view customer bought')->name('pages.report.customer_index');
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

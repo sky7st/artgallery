@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use Illuminate\Http\Request;
 use App\Saler;
 use App\EnquiryPair;
@@ -129,6 +130,19 @@ class ReportController extends Controller
             'data' => [
                 'salers' => $salers
             ]
+        ]);
+    }
+    public function customerIndex(){
+        $customers = Customer::orderBy('name')->paginate(10);
+        // $customers->load('boughtReport');
+        $customers->map(function ($customer){
+            $customer->boughtReport;
+            $customer["thisYearSum"] = (int)$customer->thisYearSum;
+            $customer["lastYearSum"] = (int)$customer->lastYearSum;
+        }); 
+        error_log($customers);
+        return view('pages.report.customer_index',[
+            'customers' => $customers
         ]);
     }
     /**

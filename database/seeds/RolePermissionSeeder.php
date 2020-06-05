@@ -76,6 +76,9 @@ class RolePermissionSeeder extends Seeder
         $permissionCanViewSelfSold = Permission::create([
             'name' => 'view self sold'
         ]);
+        $permissionCanViewCustomerBuy = Permission::create([
+            'name' => 'view customer bought'
+        ]);
 
         $roleAdmin->syncPermissions([
             $permissionArtistUpdate,
@@ -86,7 +89,8 @@ class RolePermissionSeeder extends Seeder
             $permissionMakeTrade,
             $permissionEnquiry,
             $permissionViewSalerReport,
-            $permissionCanViewSelfSold
+            $permissionCanViewSelfSold,
+            $permissionCanViewCustomerBuy
         ]);
         
         $roleArtist->syncPermissions([
